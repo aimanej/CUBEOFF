@@ -19,8 +19,28 @@ int hooker(int keysim, void *data)
 
 void draw_player(t_map *map)
 {
-    int center_x = map->player.pos.x * TILE_SIZE + TILE_SIZE / 2;
-    int center_y = map->player.pos.y * TILE_SIZE + TILE_SIZE / 2;
+    // double step =
+    // if (map->player.walk_dir != 0)
+    // {
+    //     map->player.pos.x += map->player.walk_dir * map->player.move_speed;
+    //     map->player.pos.y += map->player.walk_dir * map->player.move_speed;
+    //     // map->player.pos.x = center_x / TILE_SIZE - TILE_SIZE / 2;
+    //     // map->player.pos.y = center_y / TILE_SIZE - TILE_SIZE / 2;
+    // }
+    double step = map->player.walk_dir * map->player.move_speed;
+    int center_x = map->player.center_pos.x;
+    int center_y = map->player.center_pos.y;
+    if (map->player.walk_dir != 0)
+    {
+        center_x += cos(map->player.rot_angle) * step;
+        center_y += sin(map->player.rot_angle) * step;
+        map->player.center_pos.x = center_x ;
+        map->player.center_pos.y= center_y;
+
+        // map->player.pos.x = center_x / TILE_SIZE - TILE_SIZE / 2;
+        // map->player.pos.y = center_y / TILE_SIZE - TILE_SIZE / 2;
+    }
+
     int radius = map->player.radius;
 
     printf("Player center: %d, %d\n", center_x, center_y);
@@ -49,12 +69,12 @@ void draw_line(t_map *map)
     int posy = map->player.pos.y * TILE_SIZE + (TILE_SIZE / 2);
 
     double angle = map->player.rot_angle;
-    if(map->player.turn_dir != 0)
+    if (map->player.turn_dir != 0)
     {
         angle += map->player.turn_dir * map->player.rotation_speed;
         map->player.rot_angle = angle;
     }
-    
+
     double dirx = cos(angle);
     double diry = sin(angle);
     for (int a = 1; a < 60; a++)
@@ -111,6 +131,8 @@ void get_player_pos(t_map *map)
             {
                 map->player.pos.x = y;
                 map->player.pos.y = x;
+                map->player.center_pos.x = y * TILE_SIZE + (TILE_SIZE / 2);
+                map->player.center_pos.y = x * TILE_SIZE + (TILE_SIZE / 2);
             }
             y++;
         }
@@ -126,6 +148,8 @@ void intializer(t_mlx *mlx)
     mlx->map.player.radius = 3;
     mlx->map.player.rotation_speed = 2 * (PI / 180);
     mlx->map.player.rot_angle = 30 * (PI / 180);
+    mlx->map.player.center_pos.x = 0;
+    mlx->map.player.center_pos.y = 0;
 }
 
 int press_hook(int keysim, void *data)

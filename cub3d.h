@@ -23,6 +23,7 @@ typedef struct s_vec{
 
 typedef struct s_player{
     t_vec pos;
+    t_vec center_pos;
     int radius;
     int turn_dir;
     int walk_dir;
