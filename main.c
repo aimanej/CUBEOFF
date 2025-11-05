@@ -46,7 +46,7 @@ void intializer(t_mlx *mlx)
     mlx->map.player.pos.y = 0;
     mlx->map.player.radius = 3;
     mlx->map.player.rotation_speed = 2 * (PI / 180);
-    mlx->map.player.rot_angle = 90 * (PI / 180);
+    mlx->map.player.view_angle = 90 * (PI / 180);
     mlx->map.player.center_pos.x = 0;
     mlx->map.player.center_pos.y = 0;
     mlx->map.player.walk_dir = 0;

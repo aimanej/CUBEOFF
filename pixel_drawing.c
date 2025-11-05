@@ -49,11 +49,11 @@ void draw_line(t_map *map)
     int posx = map->player.center_pos.x;
     int posy = map->player.center_pos.y;
 
-    double angle = map->player.rot_angle;
+    double angle = map->player.view_angle;
     // if (map->player.turn_dir != 0)
     // {
     //     angle += map->player.turn_dir * map->player.rotation_speed;
-    //     map->player.rot_angle = angle;
+    //     map->player.view_angle = angle;
     // }
 
     double dirx = cos(angle);
@@ -73,8 +73,8 @@ void player_update(t_map *map)
     if (map->player.walk_dir)
     {
         double step = map->player.move_speed * map->player.walk_dir;
-        double next_cx = map->player.center_pos.x + cos(map->player.rot_angle) * step;
-        double next_cy = map->player.center_pos.y + sin(map->player.rot_angle) * step;
+        double next_cx = map->player.center_pos.x + cos(map->player.view_angle) * step;
+        double next_cy = map->player.center_pos.y + sin(map->player.view_angle) * step;
         int nextx = next_cx  / TILE_SIZE;
         int nexty = next_cy / TILE_SIZE;
         if(map->map[nexty][nextx] == '1')
@@ -91,7 +91,10 @@ void player_update(t_map *map)
     }
     if (map->player.turn_dir)
     {
-        map->player.rot_angle += map->player.rotation_speed * map->player.turn_dir;
+        map->player.view_angle += map->player.rotation_speed * map->player.turn_dir;
+        map->player.view_angle = fmod(map->player.view_angle, ( 2 * PI));
+        if(map->player.view_angle < 0)
+            map->player.view_angle = (2 * PI) + map->player.view_angle;
     }
 }
 
@@ -143,20 +146,24 @@ void cast_rays(t_mlx *mlx)
 {
     t_player *player = &(mlx->map.player);
     
+
+    int t = (player->view_angle * 180) / PI;
+    printf("vie angle %d \n", t);
+
     int rays = TILE_SIZE * mlx->map.len / 10;
     int screen_width = TILE_SIZE * mlx->map.len;
 
     double angle_step = player->fov / rays;
 
-    double current_angle = player->rot_angle - (player->fov / 2);
-    double end = player->rot_angle + (player->fov / 2);
+    double current_angle = player->view_angle - (player->fov / 2);
+    double end = player->view_angle + (player->fov / 2);
 
-    printf("%d step \n", (int)angle_step);
+    // printf("%d step \n", (int)angle_step);
     for(int a = 0; a < rays; a++)
     {
         current_angle += angle_step;
-        if(current_angle > end)
-            continue;
+        // if(current_angle > end)
+        //     continue;
         for(int t = 0; t < 160; t++)
         {
             double nextx = player->center_pos.x + cos(current_angle) * t;

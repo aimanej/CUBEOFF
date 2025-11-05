@@ -28,10 +28,14 @@ typedef struct s_player{
     int radius;
     int turn_dir;
     int walk_dir;
-    double rot_angle;
+    double view_angle;
     int move_speed;
     double rotation_speed;
     double fov;
+    int hor_x_intercept;
+    int hor_y_intercept;
+    int hor_x_step;
+    int hor_y_step;
 }t_player;
 
 typedef struct s_map{
