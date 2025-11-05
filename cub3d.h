@@ -6,6 +6,7 @@
 // #define 
 #include <math.h>
 #include <stdio.h>
+#include "/home/aimane-jadid/Desktop/minilibx-linux/mlx.h"
 #define PI 3.14159265358979323846
 
 typedef struct t_image{
@@ -30,6 +31,7 @@ typedef struct s_player{
     double rot_angle;
     int move_speed;
     double rotation_speed;
+    double fov;
 }t_player;
 
 typedef struct s_map{
@@ -52,5 +54,13 @@ int	map_height(t_map *map_s, char *av);
 int chimicolor(int r, int g, int b);
 void draw_to_img(t_image *img, int x, int y, int color);
 void drawmap(t_mlx *mlx);
+void cast_rays(t_mlx *mlx);
+
+//key hooks
+int hooker(int keysim, void *data);
+int press_hook(int keysim, void *data);
+int release_hook(int keysim, void *data);
+void player_update(t_map *map);
+
 
 #endif
