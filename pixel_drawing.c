@@ -138,11 +138,12 @@ void drawmap(t_mlx *mlx)
     mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->map.img.img_ptr, 0, 0);
 }
 
-int wall_check(t_map *map, double x, double y, int step)
+int wall_check(t_map *map, double x, double y)
 {
-    int xx = (map->player.center_pos.x) + (x * step);
-    int yy = map->player.center_pos.y + (y * step);
-    if (map->map[xx / TILE_SIZE][yy / TILE_SIZE] == 1)
+    int xx = (int)x / TILE_SIZE;
+    int yy = (int)y / TILE_SIZE;
+    // printf("xx : %d yy %d position checked : %c\n", xx, yy, );
+    if (map->map[xx][yy] == '1')
         return 1;
     return 0;
 }
@@ -150,30 +151,45 @@ int wall_check(t_map *map, double x, double y, int step)
 void cast_one(t_map *map)
 {
     t_ray ray = map->player.ray;
-    int x_inter = 0;
-    int y_inter = floor(map->player.center_pos.y / TILE_SIZE) * TILE_SIZE;
-    if (map->player.face_du == DOWN)
-        y_inter += TILE_SIZE;
-    if (map->player.face_lr == RIGHT)
-    {
-        x_inter = map->player.center_pos.x + ((map->player.center_pos.y - y_inter) / tan(map->player.view_angle));
-        printf("\n adding --> %d \n", ((map->player.center_pos.y - y_inter) / tan(map->player.view_angle)));
-    }
-    else if (map->player.face_lr == LEFT)
-    {
-        x_inter = map->player.center_pos.x - ((map->player.center_pos.y - y_inter) / tan(map->player.view_angle));
-        printf("subtracting x --> %d \n", ((map->player.center_pos.y - y_inter) / tan(map->player.view_angle)));
-    }
-    printf("intesection x : %d y: %d\n", x_inter, y_inter);
-    printf(" direction up down : %d\n direction left right : %d\n ", map->player.face_du, map->player.face_lr);
+    // int x_inter = 0;
+    // int y_inter = floor(map->player.center_pos.y / TILE_SIZE) * TILE_SIZE;
+    // if (map->player.face_du == DOWN)
+    //     y_inter += TILE_SIZE;
+    // double opp = map->player.center_pos.y - y_inter;
+    // double offset = opp / tan(map->player.view_angle);
+    // if (map->player.face_lr == RIGHT)
+    // {
+    //     x_inter = map->player.center_pos.x + abs(offset);
+    //     printf("\n adding --> %d \n", offset);
+    // }
+    // else if (map->player.face_lr == LEFT)
+    // {
+    //     x_inter = map->player.center_pos.x - offset;
+    //     printf("subtracting x --> %d \n", ((map->player.center_pos.y - y_inter) / tan(map->player.view_angle)));
+    // }
+    // printf("intesection x : %d y: %d\n", x_inter, y_inter);
+    // printf(" direction up down : %d\n direction left right : %d\n ", map->player.face_du, map->player.face_lr);
 
     t_player player = map->player;
-    for (int a = 0; a < 60; a++)
+    double nextx = player.center_pos.x + cos(player.view_angle);
+    double nexty = player.center_pos.y + sin(player.view_angle);
+    // printf("sin cos : %f  -- %f\n", sin(player.view_angle) ,cos(player.view_angle) );
+    int a = 2;
+    // printf("wall check : %d\n", );
+    while(a < 10000)
     {
-        double nextx = player.center_pos.x + cos(player.view_angle) * a;
-        double nexty = player.center_pos.y + sin(player.view_angle) * a;
+        if(!wall_check(map, nextx, nexty))
+            break;
         draw_to_img(&(map->img), nextx, nexty, chimicolor(112, 43, 66));
+        nextx = player.center_pos.x + cos(player.view_angle) * a;
+        nexty = player.center_pos.y + sin(player.view_angle) * a;
+        printf(" --nexts - > %f , %f \n", nextx , nexty);
+        a += 2;
     }
+    // // printf("number of pixels painted : %d , wallcheck : %d\n", a, wall_check(map, nextx, nexty));
+    // int x = nextx / TILE_SIZE;
+    // int y = nexty / TILE_SIZE;
+    // // printf("x y of intersection : ( %d , %d )\n", x , y );
 }
 
 void cast_rays(t_mlx *mlx)
