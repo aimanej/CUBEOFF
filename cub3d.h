@@ -6,7 +6,7 @@
 // #define 
 #include <math.h>
 #include <stdio.h>
-#include "/home/aimane-jadid/Desktop/minilibx-linux/mlx.h"
+#include "/home/aijadid/Desktop/minilibx-linux/mlx.h"
 #define PI 3.14159265358979323846
 
 typedef struct t_image{
@@ -21,6 +21,18 @@ typedef struct s_vec{
     int x;
     int y;
 }t_vec;
+typedef struct s_ray{
+    double angle;
+    int xinter;
+    int yinter;
+}t_ray;
+
+typedef enum e_face{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+}t_face;
 
 typedef struct s_player{
     t_vec pos;
@@ -32,10 +44,9 @@ typedef struct s_player{
     int move_speed;
     double rotation_speed;
     double fov;
-    int hor_x_intercept;
-    int hor_y_intercept;
-    int hor_x_step;
-    int hor_y_step;
+    t_face face_du;
+    t_face face_lr;
+    t_ray ray;
 }t_player;
 
 typedef struct s_map{
