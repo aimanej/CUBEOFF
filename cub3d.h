@@ -2,7 +2,7 @@
 #define CUB3D_H
 
 #include "get_next_line.h"
-#define TILE_SIZE 50
+#define TILE_SIZE 100
 // #define 
 #include <math.h>
 #include <stdio.h>
@@ -76,6 +76,9 @@ int hooker(int keysim, void *data);
 int press_hook(int keysim, void *data);
 int release_hook(int keysim, void *data);
 void player_update(t_map *map);
+int wall_check(t_map *map, double row, double col);
+double hoz_distance(t_map *map);
+double ver_distance(t_map *map);
 
 
 #endif

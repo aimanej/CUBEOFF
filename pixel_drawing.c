@@ -23,8 +23,8 @@ void draw_player(t_map *map)
 {
 
     double step = map->player.walk_dir * map->player.move_speed;
-    int center_x = map->player.center_pos.row;
-    int center_y = map->player.center_pos.col;
+    int center_x = map->player.center_pos.col;
+    int center_y = map->player.center_pos.row;
     int radius = map->player.radius;
 
     for (int dy = -radius; dy <= radius; dy++)
@@ -46,23 +46,36 @@ void draw_player(t_map *map)
 
 void draw_line(t_map *map)
 {
-    int posx = map->player.center_pos.row;
-    int posy = map->player.center_pos.col;
+    // int posx = map->player.center_pos.col;
+    // int posy = map->player.center_pos.row;
 
-    double angle = map->player.view_angle;
-    // if (map->player.turn_dir != 0)
+    // double angle = map->player.view_angle;
+    // // if (map->player.turn_dir != 0)
+    // // {
+    // //     angle += map->player.turn_dir * map->player.rotation_speed;
+    // //     map->player.view_angle = angle;
+    // // }
+
+    // double dirx = cos(angle);
+    // double diry = sin(angle);
+    // for (int a = 1; a < 25; a++)
     // {
-    //     angle += map->player.turn_dir * map->player.rotation_speed;
-    //     map->player.view_angle = angle;
+    //     double nextx = posx + dirx * a;
+    //     double nexty = posy + diry * a;
+    //     draw_to_img(&(map->img), nextx, nexty, chimicolor(160, 27, 12));
     // }
-
-    double dirx = cos(angle);
-    double diry = sin(angle);
-    for (int a = 1; a < 25; a++)
+    t_player player = map->player;
+    double angle = player.view_angle;
+    double nextx = player.center_pos.col + cos(angle);
+    double nexty = player.center_pos.row + sin(angle);
+    int t = 1;
+    while (!wall_check(map, nexty, nextx))
     {
-        double nextx = posx + dirx * a;
-        double nexty = posy + diry * a;
-        draw_to_img(&(map->img), nextx, nexty, chimicolor(160, 27, 12));
+        draw_to_img(&(map->img), nextx, nexty, chimicolor(155, 155, 155));
+        nextx = player.center_pos.col + cos(angle) * t;
+        nexty = player.center_pos.row + sin(angle) * t;
+        // printf("%f, %f <--- positions sent\n\n", nextx, nexty);
+        t++;
     }
 }
 
@@ -72,18 +85,18 @@ void player_update(t_map *map)
     if (map->player.walk_dir)
     {
         double step = map->player.move_speed * map->player.walk_dir;
-        double next_cx = map->player.center_pos.row + cos(map->player.view_angle) * step;
-        double next_cy = map->player.center_pos.col + sin(map->player.view_angle) * step;
+        double next_cx = map->player.center_pos.col + cos(map->player.view_angle) * step;
+        double next_cy = map->player.center_pos.row + sin(map->player.view_angle) * step;
         int nextx = next_cx / TILE_SIZE;
         int nexty = next_cy / TILE_SIZE;
         if (map->map[nexty][nextx] == '1')
             return;
         else
         {
-            map->player.center_pos.row = next_cx;
-            map->player.center_pos.col = next_cy;
-            map->player.pos.row = nextx;
-            map->player.pos.col = nexty;
+            map->player.center_pos.row = next_cy;
+            map->player.center_pos.col = next_cx;
+            map->player.pos.col = nextx;
+            map->player.pos.row = nexty;
         }
         // printf("next positions (%d ,%d )\n", player->pos.x, player->pos.y);
     }
@@ -112,25 +125,25 @@ void drawmap(t_mlx *mlx)
 
     // printf("size : %d\n len : %d\n", mlx->map.size, mlx->map.len);
 
-    while (col < mlx->map.size)
+    while (row < mlx->map.size)
     {
-        row = 0;
-        while (row < mlx->map.len - 1)
+        col = 0;
+        while (col < mlx->map.len - 1)
         {
-            if (mlx->map.map[col][row] == '1')
+            if (mlx->map.map[row][col] == '1')
             {
                 for (int a = 0; a < TILE_SIZE - 3; a++)
                 {
                     for (int b = 0; b < TILE_SIZE - 3; b++)
                     {
 
-                        draw_to_img(&(mlx->map.img), (row * TILE_SIZE) + a, (col * TILE_SIZE) + b, chimicolor(160, 27, 12));
+                        draw_to_img(&(mlx->map.img), (col * TILE_SIZE) + a, (row * TILE_SIZE) + b, chimicolor(160, 27, 12));
                     }
                 }
             }
-            row++;
+            col++;
         }
-        col++;
+        row++;
     }
     draw_player(&(mlx->map));
     draw_line(&(mlx->map));
@@ -140,88 +153,90 @@ void drawmap(t_mlx *mlx)
 
 int wall_check(t_map *map, double row, double col)
 {
-    int xx = ceil((int)row / TILE_SIZE);
-    int yy = ceil((int)col / TILE_SIZE);
-    // printf("xx : %d yy %d position checked : %c\n", xx, yy, map->map[yy][xx]);
+    int coll = ceil((int)col / TILE_SIZE);
+    int roww = ceil((int)row / TILE_SIZE);
+    // printf("coll : %d roww %d position checked : %c\n", coll, roww, map->map[roww][coll]);
 
-    if (xx <= 0 || xx >= map->len - 1 || yy <= 0 || yy >= map->size - 1 || map->map[yy][xx] == '1')
+    if (coll <= 0 || coll >= map->len - 1 || roww <= 0 || roww >= map->size - 1 || map->map[roww][coll] == '1')
         return 1;
     return 0;
 }
 
-void cast_one(t_map *map)
+double hoz_distance(t_map *map)
 {
     t_ray ray = map->player.ray;
-    double row_inter = 0;
-    double col_inter = floor(map->player.center_pos.col / TILE_SIZE) * TILE_SIZE;
+    double col_inter = 0;
+    double row_inter = floor(map->player.center_pos.row / TILE_SIZE) * TILE_SIZE;
     if (map->player.face_du == DOWN)
-        col_inter += TILE_SIZE;
+        row_inter += TILE_SIZE;
     double opp = 0;
     if (map->player.face_du == UP)
-        opp = map->player.center_pos.col - col_inter;
+        opp = map->player.center_pos.row - row_inter;
     else if (map->player.face_du == DOWN)
-        opp = col_inter - map->player.center_pos.col;
-    if (map->player.view_angle == PI || map->player.view_angle == PI / 2 || map->player.view_angle == 2 * PI || map->player.view_angle == (3 * PI) / 2)
-    {
-        printf("skipped intesection check\n");
-        return;
-    }
+        opp = row_inter - map->player.center_pos.row;
+    if (fabs(sin(map->player.view_angle)) < 0.0001)
+        return 0;
     double tanner = tan(map->player.view_angle);
     printf("tan ---- > %f\n", tanner);
     double adj = opp / tanner;
     if (map->player.face_du == UP)
         adj *= -1;
-    row_inter = map->player.center_pos.row + adj;
-    // if (map->player.face_lr == RIGHT)
-    // {
-    //     // printf("\n adding --> %d \n", offset);
-    // }
-    // else if (map->player.face_lr == LEFT)
-    // {
-    //     row_inter = map->player.center_pos.row - adj;
-    //     // printf("subtracting x --> %d \n", ((map->player.center_pos.col - col_inter) / tan(map->player.view_angle)));
-    // }
-    printf("----->intesection x : %f y: %f\n", row_inter, col_inter);
-    double col_step = TILE_SIZE;
-    double row_step = col_step / tanner;
+    col_inter = map->player.center_pos.col + adj;
+    double row_step = TILE_SIZE;
+    double col_step = row_step / tanner;
     if (map->player.face_du == UP)
     {
-        col_step *= -1;
+        row_step *= -1;
     }
     if (map->player.face_lr == LEFT)
-        row_step = -fabs(row_step);
+        col_step = -fabs(col_step);
     else if (map->player.face_lr == RIGHT)
-        row_step = fabs(row_step);
-    printf("tan %f of %f syeps : row col %f %f \n", tanner, map->player.view_angle, row_step, col_step);
-
+        col_step = fabs(col_step);
     int coef = 0;
-    double off = (map->player.face_du == UP) ? -1 : 1;
-    if (wall_check(map, row_inter, col_inter))
+    double off = (map->player.face_du == UP) ? -1 : 0;
+    int a = 0;
+    while (!wall_check(map, row_inter + off, col_inter))
     {
-        printf("wall inter with steps : %f %f\n", row_inter, col_inter + off);
-        return;
+        a++;
+        row_inter += row_step;
+        col_inter += col_step;
+        if (col_inter < 0 || col_inter >= map->len * TILE_SIZE || row_inter < 0 || row_inter >= map->size * TILE_SIZE)
+            break;
+        // return;
     }
+    double distance = sqrt(((row_inter - map->player.center_pos.row) * (row_inter - map->player.center_pos.row)) + ((col_inter - map->player.center_pos.col) * (col_inter - map->player.center_pos.col)));
 
-    while (!wall_check(map, row_inter + (row_step * coef) + 1, col_inter + (col_step * coef) + 1))
-    {
-        coef++;
-    }
-    printf("wall inter with steps : %f %f coef  %d \n", row_inter + (row_step * coef) + 1, col_inter + (col_step * coef) + 1, coef);
+    printf("distance  %f\n", distance);
+    return distance;
+    // printf("last point drawn : %f , %f - found wall ? : %d \n", nextx, nexty, wall_check(map, nextx, nexty));
+}
 
-    // //casting ray for precision check
-    // t_player player = map->player;
-    // double angle = player.view_angle;
-    // double nextx = player.center_pos.row + cos(angle);
-    // double nexty = player.center_pos.col + sin(angle);
-    // int t = 1;
-    // while (!wall_check(map, nextx, nexty))
-    // {
-    //     draw_to_img(&(map->img), nextx, nexty, chimicolor(155, 155, 155));
-    //     nextx = player.center_pos.row + cos(angle) * t;
-    //     nexty = player.center_pos.col + sin(angle) * t;
-    //     // printf("%f, %f <--- positions sent\n\n", nextx, nexty);
-    //     t++;
-    // }
+double ver_distance(t_map *map)
+{
+    t_player player = map->player;
+
+    double row_inter = 0;
+    double col_inter = floor(player.center_pos.col / TILE_SIZE) * TILE_SIZE;
+    if (player.face_lr == RIGHT)
+        col_inter += TILE_SIZE;
+    double adj = 0;
+    if (player.face_lr == RIGHT)
+        adj = col_inter - player.center_pos.col;
+    else if (player.face_lr == LEFT)
+        adj = player.center_pos.col - col_inter;
+    
+    if (fabs(sin(player.view_angle)) == 1)
+        return 0;
+    double opp = tan(player.view_angle) * adj;
+    // if (map->player.face_du == UP)
+    //     opp *= -1;
+    if (player.face_du == UP && player.face_lr == RIGHT)
+        row_inter = player.center_pos.row - opp;
+    else if (player.face_du == DOWN)
+        row_inter = player.center_pos.row + opp;
+
+    printf("checking verticals : %f %f\n", row_inter, col_inter);
+    return 0;
     // printf("last point drawn : %f , %f - found wall ? : %d \n", nextx, nexty, wall_check(map, nextx, nexty));
 }
 
@@ -229,29 +244,13 @@ void cast_rays(t_mlx *mlx)
 {
     t_player *player = &(mlx->map.player);
 
-    cast_one(&(mlx->map));
-    // int t = (player->view_angle * 180) / PI;
-    // printf("vie angle %d \n", t);
+    // hoz_distance(&(mlx->map));
+    ver_distance(&(mlx->map));
 
-    // int rays = TILE_SIZE * mlx->map.len / 10;
-    // int screen_width = TILE_SIZE * mlx->map.len;
+    // double fov = player->fov;
+    // double width = (mlx->map.len - 1) * TILE_SIZE;
+    // int ray_n = width / (fov * (180 / PI));
+    // double angle_step = fov / ray_n;
 
-    // double angle_step = player->fov / rays;
-
-    // double current_angle = player->view_angle - (player->fov / 2);
-    // double end = player->view_angle + (player->fov / 2);
-
-    // // printf("%d step \n", (int)angle_step);
-    // for(int a = 0; a < rays; a++)
-    // {
-    //     current_angle += angle_step;
-    //     // if(current_angle > end)
-    //     //     continue;
-    //     for(int t = 0; t < 100; t++)
-    //     {
-    //         double nextx = player->center_pos.x + cos(current_angle) * t;
-    //         double nexty = player->center_pos.y + sin(current_angle) * t;
-    //         draw_to_img(&(mlx->map.img), nextx, nexty, chimicolor(100, 100, 100));
-    //     }
-    // }
+    // printf("")
 }
