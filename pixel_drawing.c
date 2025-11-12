@@ -142,8 +142,9 @@ int wall_check(t_map *map, double x, double y)
 {
     int xx = (int)x / TILE_SIZE;
     int yy = (int)y / TILE_SIZE;
-    // printf("xx : %d yy %d position checked : %c\n", xx, yy, );
-    if (map->map[xx][yy] == '1')
+    printf("xx : %d yy %d position checked : %c\n", xx, yy, map->map[xx][yy]);
+    
+    if (xx <= 0 || xx >= map->len - 1 || yy  <= 0 || yy >= map->size - 1 || map->map[yy][xx] == '1')
         return 1;
     return 0;
 }
@@ -169,27 +170,20 @@ void cast_one(t_map *map)
     // }
     // printf("intesection x : %d y: %d\n", x_inter, y_inter);
     // printf(" direction up down : %d\n direction left right : %d\n ", map->player.face_du, map->player.face_lr);
-
     t_player player = map->player;
-    double nextx = player.center_pos.x + cos(player.view_angle);
-    double nexty = player.center_pos.y + sin(player.view_angle);
-    // printf("sin cos : %f  -- %f\n", sin(player.view_angle) ,cos(player.view_angle) );
-    int a = 2;
-    // printf("wall check : %d\n", );
-    while(a < 10000)
+    double angle = player.view_angle;
+    double nextx = player.center_pos.x + cos(angle);
+    double nexty = player.center_pos.y + sin(angle);
+    int t = 1;
+    while(!wall_check(map, nextx, nexty))
     {
-        if(!wall_check(map, nextx, nexty))
-            break;
-        draw_to_img(&(map->img), nextx, nexty, chimicolor(112, 43, 66));
-        nextx = player.center_pos.x + cos(player.view_angle) * a;
-        nexty = player.center_pos.y + sin(player.view_angle) * a;
-        printf(" --nexts - > %f , %f \n", nextx , nexty);
-        a += 2;
+        draw_to_img(&(map->img), nextx, nexty, chimicolor(155, 155, 155));
+        nextx = player.center_pos.x + cos(angle) * t;
+        nexty = player.center_pos.y + sin(angle) * t;
+        t++;
     }
-    // // printf("number of pixels painted : %d , wallcheck : %d\n", a, wall_check(map, nextx, nexty));
-    // int x = nextx / TILE_SIZE;
-    // int y = nexty / TILE_SIZE;
-    // // printf("x y of intersection : ( %d , %d )\n", x , y );
+    printf("last point drawn : %f , %f - found wall ? : %d \n", nextx, nexty, wall_check(map, nextx, nexty));
+
 }
 
 void cast_rays(t_mlx *mlx)
