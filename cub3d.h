@@ -18,8 +18,8 @@ typedef struct t_image{
 }t_image;
 
 typedef struct s_vec{
-    int x;
-    int y;
+    double row;
+    double col;
 }t_vec;
 typedef struct s_ray{
     double angle;

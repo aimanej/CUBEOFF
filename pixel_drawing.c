@@ -23,8 +23,8 @@ void draw_player(t_map *map)
 {
 
     double step = map->player.walk_dir * map->player.move_speed;
-    int center_x = map->player.center_pos.x;
-    int center_y = map->player.center_pos.y;
+    int center_x = map->player.center_pos.row;
+    int center_y = map->player.center_pos.col;
     int radius = map->player.radius;
 
     for (int dy = -radius; dy <= radius; dy++)
@@ -46,8 +46,8 @@ void draw_player(t_map *map)
 
 void draw_line(t_map *map)
 {
-    int posx = map->player.center_pos.x;
-    int posy = map->player.center_pos.y;
+    int posx = map->player.center_pos.row;
+    int posy = map->player.center_pos.col;
 
     double angle = map->player.view_angle;
     // if (map->player.turn_dir != 0)
@@ -72,18 +72,18 @@ void player_update(t_map *map)
     if (map->player.walk_dir)
     {
         double step = map->player.move_speed * map->player.walk_dir;
-        double next_cx = map->player.center_pos.x + cos(map->player.view_angle) * step;
-        double next_cy = map->player.center_pos.y + sin(map->player.view_angle) * step;
+        double next_cx = map->player.center_pos.row + cos(map->player.view_angle) * step;
+        double next_cy = map->player.center_pos.col + sin(map->player.view_angle) * step;
         int nextx = next_cx / TILE_SIZE;
         int nexty = next_cy / TILE_SIZE;
         if (map->map[nexty][nextx] == '1')
             return;
         else
         {
-            map->player.center_pos.x = next_cx;
-            map->player.center_pos.y = next_cy;
-            map->player.pos.x = nextx;
-            map->player.pos.y = nexty;
+            map->player.center_pos.row = next_cx;
+            map->player.center_pos.col = next_cy;
+            map->player.pos.row = nextx;
+            map->player.pos.col = nexty;
         }
         // printf("next positions (%d ,%d )\n", player->pos.x, player->pos.y);
     }
@@ -107,30 +107,30 @@ void player_update(t_map *map)
 void drawmap(t_mlx *mlx)
 {
     // t_map map = mlx->map;
-    int x = 0;
-    int y = 0;
+    int row = 0;
+    int col = 0;
 
-    printf("size : %d\n len : %d\n", mlx->map.size, mlx->map.len);
+    // printf("size : %d\n len : %d\n", mlx->map.size, mlx->map.len);
 
-    while (x < mlx->map.size)
+    while (col < mlx->map.size)
     {
-        y = 0;
-        while (y < mlx->map.len - 2)
+        row = 0;
+        while (row < mlx->map.len - 1)
         {
-            if (mlx->map.map[x][y] == '1')
+            if (mlx->map.map[col][row] == '1')
             {
                 for (int a = 0; a < TILE_SIZE - 3; a++)
                 {
                     for (int b = 0; b < TILE_SIZE - 3; b++)
                     {
 
-                        draw_to_img(&(mlx->map.img), (y * TILE_SIZE) + a, (x * TILE_SIZE) + b, chimicolor(160, 27, 12));
+                        draw_to_img(&(mlx->map.img), (row * TILE_SIZE) + a, (col * TILE_SIZE) + b, chimicolor(160, 27, 12));
                     }
                 }
             }
-            y++;
+            row++;
         }
-        x++;
+        col++;
     }
     draw_player(&(mlx->map));
     draw_line(&(mlx->map));
@@ -138,13 +138,13 @@ void drawmap(t_mlx *mlx)
     mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->map.img.img_ptr, 0, 0);
 }
 
-int wall_check(t_map *map, double x, double y)
+int wall_check(t_map *map, double row, double col)
 {
-    int xx = (int)x / TILE_SIZE;
-    int yy = (int)y / TILE_SIZE;
-    printf("xx : %d yy %d position checked : %c\n", xx, yy, map->map[xx][yy]);
-    
-    if (xx <= 0 || xx >= map->len - 1 || yy  <= 0 || yy >= map->size - 1 || map->map[yy][xx] == '1')
+    int xx = ceil((int)row / TILE_SIZE);
+    int yy = ceil((int)col / TILE_SIZE);
+    // printf("xx : %d yy %d position checked : %c\n", xx, yy, map->map[yy][xx]);
+
+    if (xx <= 0 || xx >= map->len - 1 || yy <= 0 || yy >= map->size - 1 || map->map[yy][xx] == '1')
         return 1;
     return 0;
 }
@@ -152,38 +152,62 @@ int wall_check(t_map *map, double x, double y)
 void cast_one(t_map *map)
 {
     t_ray ray = map->player.ray;
-    // int x_inter = 0;
-    // int y_inter = floor(map->player.center_pos.y / TILE_SIZE) * TILE_SIZE;
-    // if (map->player.face_du == DOWN)
-    //     y_inter += TILE_SIZE;
-    // double opp = map->player.center_pos.y - y_inter;
-    // double offset = opp / tan(map->player.view_angle);
-    // if (map->player.face_lr == RIGHT)
-    // {
-    //     x_inter = map->player.center_pos.x + abs(offset);
-    //     printf("\n adding --> %d \n", offset);
-    // }
-    // else if (map->player.face_lr == LEFT)
-    // {
-    //     x_inter = map->player.center_pos.x - offset;
-    //     printf("subtracting x --> %d \n", ((map->player.center_pos.y - y_inter) / tan(map->player.view_angle)));
-    // }
-    // printf("intesection x : %d y: %d\n", x_inter, y_inter);
-    // printf(" direction up down : %d\n direction left right : %d\n ", map->player.face_du, map->player.face_lr);
-    t_player player = map->player;
-    double angle = player.view_angle;
-    double nextx = player.center_pos.x + cos(angle);
-    double nexty = player.center_pos.y + sin(angle);
-    int t = 1;
-    while(!wall_check(map, nextx, nexty))
+    int row_inter = 0;
+    int col_inter = floor(map->player.center_pos.col / TILE_SIZE) * TILE_SIZE;
+    if (map->player.face_du == DOWN)
+        col_inter += TILE_SIZE;
+    double opp = 0;
+    if (map->player.face_du == UP)
+        opp = map->player.center_pos.col - col_inter;
+    else if(map->player.face_du == DOWN)
+        opp = col_inter - map->player.center_pos.col;
+    if(map->player.view_angle == PI || map->player.view_angle == PI/2 || map->player.view_angle == 2 * PI || map->player.view_angle == (3 * PI) / 2)
     {
-        draw_to_img(&(map->img), nextx, nexty, chimicolor(155, 155, 155));
-        nextx = player.center_pos.x + cos(angle) * t;
-        nexty = player.center_pos.y + sin(angle) * t;
-        t++;
+        printf("skipped intesection check\n");
+        return ;
     }
-    printf("last point drawn : %f , %f - found wall ? : %d \n", nextx, nexty, wall_check(map, nextx, nexty));
+    double tanner = tan(map->player.view_angle);
+    printf("tan ---- > %f\n", tanner);
+    double adj = opp / tanner;
+    if (map->player.face_lr == RIGHT)
+    {
+        row_inter = map->player.center_pos.row + abs(adj);
+        // printf("\n adding --> %d \n", offset);
+    }
+    else if (map->player.face_lr == LEFT)
+    {
+        row_inter = map->player.center_pos.row - adj;
+        // printf("subtracting x --> %d \n", ((map->player.center_pos.col - col_inter) / tan(map->player.view_angle)));
+    }
+    printf("----->intesection x : %d y: %d\n", row_inter, col_inter);
+    double col_step = TILE_SIZE;
+    double row_step = col_step / tanner;
+    if(map->player.face_du == UP)
+        row_step *= -1;
+    printf("tan %f of %f syeps : row col %f %f \n",tanner, map->player.view_angle, row_step, col_step);
 
+    int coef = 0;
+    while(!wall_check(map, row_inter + row_step * coef, col_inter  + col_step * coef))
+    {
+        coef++;
+    }
+    printf("wall inter with steps : %f %f coef  %d \n", row_inter + row_step * coef, col_inter  + col_step * coef, coef);
+    
+    // //casting ray for precision check
+    // t_player player = map->player;
+    // double angle = player.view_angle;
+    // double nextx = player.center_pos.row + cos(angle);
+    // double nexty = player.center_pos.col + sin(angle);
+    // int t = 1;
+    // while (!wall_check(map, nextx, nexty))
+    // {
+    //     draw_to_img(&(map->img), nextx, nexty, chimicolor(155, 155, 155));
+    //     nextx = player.center_pos.row + cos(angle) * t;
+    //     nexty = player.center_pos.col + sin(angle) * t;
+    //     // printf("%f, %f <--- positions sent\n\n", nextx, nexty);
+    //     t++;
+    // }
+    // printf("last point drawn : %f , %f - found wall ? : %d \n", nextx, nexty, wall_check(map, nextx, nexty));
 }
 
 void cast_rays(t_mlx *mlx)

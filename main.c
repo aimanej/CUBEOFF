@@ -19,31 +19,31 @@
 
 void get_player_pos(t_map *map)
 {
-    int x = 0;
-    int y = 0;
-    while (map->map[x])
+    int row = 0;
+    int col = 0;
+    while (map->map[col])
     {
-        y = 0;
-        while (map->map[x][y])
+        row = 0;
+        while (map->map[col][row])
         {
-            if (map->map[x][y] == 'N')
+            if (map->map[col][row] == 'N')
             {
-                map->player.pos.x = y;
-                map->player.pos.y = x;
-                map->player.center_pos.x = y * TILE_SIZE + (TILE_SIZE / 2);
-                map->player.center_pos.y = x * TILE_SIZE + (TILE_SIZE / 2);
+                map->player.pos.row = row;
+                map->player.pos.col = col;
+                map->player.center_pos.row = row * TILE_SIZE + (TILE_SIZE / 2);
+                map->player.center_pos.col = col * TILE_SIZE + (TILE_SIZE / 2);
             }
-            y++;
+            row++;
         }
-        x++;
+        col++;
     }
 }
 
 void intializer(t_mlx *mlx)
 {
     mlx->map.player.move_speed = 2;
-    mlx->map.player.pos.x = 0;
-    mlx->map.player.pos.y = 0;
+    mlx->map.player.pos.row = 0;
+    mlx->map.player.pos.col = 0;
     mlx->map.player.radius = 3;
     mlx->map.player.rotation_speed = 0.5 * (PI / 180);
     mlx->map.player.view_angle = 180 * (PI / 180);
@@ -55,8 +55,8 @@ void intializer(t_mlx *mlx)
         mlx->map.player.face_lr = LEFT;
     else
         mlx->map.player.face_lr = RIGHT;
-    mlx->map.player.center_pos.x = 0;
-    mlx->map.player.center_pos.y = 0;
+    mlx->map.player.center_pos.row = 0;
+    mlx->map.player.center_pos.col = 0;
     mlx->map.player.walk_dir = 0;
     mlx->map.player.turn_dir = 0;
     mlx->map.player.fov = 60 * (PI / 180);
