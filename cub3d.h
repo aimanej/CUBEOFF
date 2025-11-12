@@ -2,7 +2,7 @@
 #define CUB3D_H
 
 #include "get_next_line.h"
-#define TILE_SIZE 100
+#define TILE_SIZE 50
 // #define 
 #include <math.h>
 #include <stdio.h>

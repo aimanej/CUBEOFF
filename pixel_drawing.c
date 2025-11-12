@@ -58,7 +58,7 @@ void draw_line(t_map *map)
 
     double dirx = cos(angle);
     double diry = sin(angle);
-    for (int a = 1; a < 60; a++)
+    for (int a = 1; a < 25; a++)
     {
         double nextx = posx + dirx * a;
         double nexty = posy + diry * a;
@@ -152,47 +152,62 @@ int wall_check(t_map *map, double row, double col)
 void cast_one(t_map *map)
 {
     t_ray ray = map->player.ray;
-    int row_inter = 0;
-    int col_inter = floor(map->player.center_pos.col / TILE_SIZE) * TILE_SIZE;
+    double row_inter = 0;
+    double col_inter = floor(map->player.center_pos.col / TILE_SIZE) * TILE_SIZE;
     if (map->player.face_du == DOWN)
         col_inter += TILE_SIZE;
     double opp = 0;
     if (map->player.face_du == UP)
         opp = map->player.center_pos.col - col_inter;
-    else if(map->player.face_du == DOWN)
+    else if (map->player.face_du == DOWN)
         opp = col_inter - map->player.center_pos.col;
-    if(map->player.view_angle == PI || map->player.view_angle == PI/2 || map->player.view_angle == 2 * PI || map->player.view_angle == (3 * PI) / 2)
+    if (map->player.view_angle == PI || map->player.view_angle == PI / 2 || map->player.view_angle == 2 * PI || map->player.view_angle == (3 * PI) / 2)
     {
         printf("skipped intesection check\n");
-        return ;
+        return;
     }
     double tanner = tan(map->player.view_angle);
     printf("tan ---- > %f\n", tanner);
     double adj = opp / tanner;
-    if (map->player.face_lr == RIGHT)
-    {
-        row_inter = map->player.center_pos.row + abs(adj);
-        // printf("\n adding --> %d \n", offset);
-    }
-    else if (map->player.face_lr == LEFT)
-    {
-        row_inter = map->player.center_pos.row - adj;
-        // printf("subtracting x --> %d \n", ((map->player.center_pos.col - col_inter) / tan(map->player.view_angle)));
-    }
-    printf("----->intesection x : %d y: %d\n", row_inter, col_inter);
+    if (map->player.face_du == UP)
+        adj *= -1;
+    row_inter = map->player.center_pos.row + adj;
+    // if (map->player.face_lr == RIGHT)
+    // {
+    //     // printf("\n adding --> %d \n", offset);
+    // }
+    // else if (map->player.face_lr == LEFT)
+    // {
+    //     row_inter = map->player.center_pos.row - adj;
+    //     // printf("subtracting x --> %d \n", ((map->player.center_pos.col - col_inter) / tan(map->player.view_angle)));
+    // }
+    printf("----->intesection x : %f y: %f\n", row_inter, col_inter);
     double col_step = TILE_SIZE;
     double row_step = col_step / tanner;
-    if(map->player.face_du == UP)
-        row_step *= -1;
-    printf("tan %f of %f syeps : row col %f %f \n",tanner, map->player.view_angle, row_step, col_step);
+    if (map->player.face_du == UP)
+    {
+        col_step *= -1;
+    }
+    if (map->player.face_lr == LEFT)
+        row_step = -fabs(row_step);
+    else if (map->player.face_lr == RIGHT)
+        row_step = fabs(row_step);
+    printf("tan %f of %f syeps : row col %f %f \n", tanner, map->player.view_angle, row_step, col_step);
 
     int coef = 0;
-    while(!wall_check(map, row_inter + row_step * coef, col_inter  + col_step * coef))
+    double off = (map->player.face_du == UP) ? -1 : 1;
+    if (wall_check(map, row_inter, col_inter))
+    {
+        printf("wall inter with steps : %f %f\n", row_inter, col_inter + off);
+        return;
+    }
+
+    while (!wall_check(map, row_inter + (row_step * coef) + 1, col_inter + (col_step * coef) + 1))
     {
         coef++;
     }
-    printf("wall inter with steps : %f %f coef  %d \n", row_inter + row_step * coef, col_inter  + col_step * coef, coef);
-    
+    printf("wall inter with steps : %f %f coef  %d \n", row_inter + (row_step * coef) + 1, col_inter + (col_step * coef) + 1, coef);
+
     // //casting ray for precision check
     // t_player player = map->player;
     // double angle = player.view_angle;
