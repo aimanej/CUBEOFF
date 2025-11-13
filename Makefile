@@ -1,4 +1,4 @@
-Srcs = get_next_line.c get_next_line_utils.c main.c maprearding.c pixel_drawing.c key_hooks.c
+Srcs = get_next_line.c get_next_line_utils.c main.c maprearding.c pixel_drawing.c key_hooks.c player_update.c wall_distance.c
 
 Flags = -lmlx -lXext -lX11 -lm
 
