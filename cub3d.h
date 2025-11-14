@@ -3,6 +3,7 @@
 
 #include "get_next_line.h"
 #define TILE_SIZE 100
+#define SCALE 0.2
 // #define 
 #include <math.h>
 #include <stdio.h>

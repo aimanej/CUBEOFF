@@ -34,7 +34,7 @@ void draw_player(t_map *map)
             // Draw circle using distance formula
             if (dx * dx + dy * dy <= radius * radius)
             {
-                draw_to_img(&(map->img), center_x + dx, center_y + dy, chimicolor(224, 33, 5));
+                draw_to_img(&(map->img), (center_x + dx) * SCALE, (center_y + dy) * SCALE, chimicolor(224, 33, 5));
             }
         }
     }
@@ -55,7 +55,7 @@ void draw_line(t_map *map)
     {
         draw_to_img(&(map->img), nextx, nexty, chimicolor(155, 155, 155));
         nextx += cos(angle);
-        nexty +=  sin(angle);
+        nexty += sin(angle);
         // printf("%f, %f <--- positions sent\n\n", nextx, nexty);
         t++;
     }
@@ -81,7 +81,7 @@ void drawmap(t_mlx *mlx)
                     for (int b = 0; b < TILE_SIZE - 3; b++)
                     {
 
-                        draw_to_img(&(mlx->map.img), (col * TILE_SIZE) + a, (row * TILE_SIZE) + b, chimicolor(160, 27, 12));
+                        draw_to_img(&(mlx->map.img), ((col * TILE_SIZE) + a) * SCALE, ((row * TILE_SIZE) + b) * SCALE, chimicolor(160, 27, 12));
                     }
                 }
             }
@@ -120,7 +120,7 @@ void one_liner(t_map *map, double distance, double angle)
     // printf("distances checked : ab : %f == dis : %f \n", ab , distance);
     while (ab < distance)
     {
-        draw_to_img(&(map->img), col_next, row_next, chimicolor(155, 155, 155));
+        draw_to_img(&(map->img), col_next * SCALE, row_next * SCALE, chimicolor(155, 155, 155));
         row_next += sin(angle);
         col_next += cos(angle);
         ab = AB_distance(row_start, col_start, row_next, col_next);
@@ -135,33 +135,54 @@ void mother_cast(t_map *map)
     double ang_start = py.view_angle - (fov / 2);
     double ray_n = screenw;
     double step = fov / ray_n;
-    
+
     int t = 0;
-    printf("rys : %f current %f \n", ray_n, ang_start);
-    while(ray_n > 0)
+    // printf("rys : %f current %f \n", ray_n, ang_start);
+    while (ray_n > 0)
     {
         double current_ang = ang_start + step * t;
+        // double hoz = hoz_distance(map, current_ang);
+        // double ver = ver_distance(map, current_ang);
         cast_rays(map, current_ang);
         ray_n--;
         t++;
     }
-    printf("FOV %f angle start %f stepss %f , number of rays %f\n", fov, ang_start, step, ray_n);
+    // printf("FOV %f angle start %f stepss %f , number of rays %f\n", fov, ang_start, step, ray_n);
 }
 
 void cast_rays(t_map *map, double angle)
 {
     t_player *player = &(map->player);
-
+    static int cur_col;
     double hoz = hoz_distance(map, angle);
     double ver = ver_distance(map, angle);
 
     // printf("hoz %f , ver %f\n", hoz, ver);
+
     one_liner(map, (hoz < ver) ? hoz : ver, angle);
 
-    // double fov = player->fov;
-    // double width = (mlx->map.len - 1) * TILE_SIZE;
-    // int ray_n = width / (fov * (180 / PI));
-    // double angle_step = fov / ray_n;
+    double wall_distance = (hoz < ver) ? hoz : ver;
+    double wall_hight = TILE_SIZE;
+
+    double proj_dist = (TILE_SIZE * map->size / 2) / tan(player->fov / 2);
+
+    double proj_height = (wall_hight / wall_distance) * proj_dist;
+
+    if (proj_height > (TILE_SIZE * map->size) - 10)
+        return;
+    
+    int row_start = ((TILE_SIZE * (map->size - 1)) / 2) - proj_height / 2;
+
+    printf("distance :%f  hight : %f row start %f \n", wall_distance, proj_height, row_start);
+    while (proj_height > 0)
+    {
+        draw_to_img(&(map->img), cur_col, row_start, chimicolor(120, 120, 120));
+        proj_height--;
+        row_start++;
+    }
+    cur_col++;
+    if(cur_col == (map->len - 1) * TILE_SIZE)
+        cur_col = 0;
 
     // printf("")
 }
