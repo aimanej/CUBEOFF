@@ -69,6 +69,8 @@ void drawmap(t_mlx *mlx)
 
     // printf("size : %d\n len : %d\n", mlx->map.size, mlx->map.len);
 
+    mother_cast(&(mlx->map));
+
     while (row < mlx->map.size)
     {
         col = 0;
@@ -85,13 +87,25 @@ void drawmap(t_mlx *mlx)
                     }
                 }
             }
+            if (mlx->map.map[row][col] == '0' || mlx->map.map[row][col] == 'N')
+            {
+                for (int a = 0; a < TILE_SIZE - 3; a++)
+                {
+                    for (int b = 0; b < TILE_SIZE - 3; b++)
+                    {
+
+                        draw_to_img(&(mlx->map.img), ((col * TILE_SIZE) + a) * SCALE, ((row * TILE_SIZE) + b) * SCALE, chimicolor(120, 7, 12));
+                    }
+                }
+            }
             col++;
         }
         row++;
     }
-    draw_player(&(mlx->map));
+
     // draw_line(&(mlx->map));
-    mother_cast(&(mlx->map));
+
+    draw_player(&(mlx->map));
     // cast_rays(&(mlx->map), mlx->map.player.view_angle);
     // cast_rays(&(mlx->map), mlx->map.player.view_angle);
     mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->map.img.img_ptr, 0, 0);
@@ -131,7 +145,7 @@ void one_liner(t_map *map, double distance, double angle)
         // if(map->map[(int)(row_next) / TILE_SIZE][(int)col_next / TILE_SIZE] == '1')
         //     break;
         // printf("col %f , col int %d \n", col_next, (int)col_next);
-        draw_to_img(&(map->img), col_next * SCALE, row_next * SCALE, chimicolor(155, 155, 155));
+        draw_to_img(&(map->img), col_next * SCALE, row_next * SCALE, chimicolor(10, 205, 155));
         row_next += sin(angle);
         col_next += cos(angle);
         ab = AB_distance(row_start, col_start, row_next, col_next);
@@ -186,33 +200,59 @@ void cast_rays(t_map *map, double angle)
     double hoz = hoz_distance(map, angle, face_du, face_lr);
     double ver = ver_distance(map, angle, face_du, face_lr);
 
-    // if (cur_col == ((map->len - 1) * TILE_SIZE - 1))
     printf("hoz %f , ver %f\n", hoz, ver);
 
-    one_liner(map, (hoz < ver) ? hoz : ver, angle);
+    // wall strip hight calculation
 
     double wall_distance = (hoz < ver) ? hoz : ver;
+
+    double corrected_dist = wall_distance * cos(angle - player->view_angle);
     double wall_hight = TILE_SIZE;
 
     double proj_dist = (TILE_SIZE * map->size / 2) / tan(player->fov / 2);
 
-    double proj_height = (wall_hight / wall_distance) * proj_dist;
+    double proj_height = (wall_hight / corrected_dist) * proj_dist;
 
-    if (proj_height > (TILE_SIZE * map->size) - 10)
-        return;
+    if (proj_height > TILE_SIZE * map->size)
+    {
+        printf("washere\n\n");
+        proj_height = TILE_SIZE * map->size;
+    }
 
     int row_start = ((TILE_SIZE * (map->size - 1)) / 2) - proj_height / 2;
-
-    // printf("distance :%f  hight : %f row start %f \n", wall_distance, proj_height, row_start);
-    while (proj_height > 0)
+    if (row_start < 0)
     {
-        if(cur_col > map->len * TILE_SIZE || row_start > (map->size - 1) * TILE_SIZE || cur_col < 0 || row_start < 0)
+        // proj_height += row_start;
+        row_start = 0;
+    }
+    int row_end = row_start + proj_height;
+    if (row_end > TILE_SIZE * map->size)
+        row_end = TILE_SIZE * map->size;
+
+    for (int ceil = 0; ceil < row_start; ceil++)
+    {
+        if (cur_col > map->len * TILE_SIZE || ceil > (map->size - 1) * TILE_SIZE || cur_col < 0 || ceil < 0)
+            break;
+        draw_to_img(&(map->img), cur_col, ceil, chimicolor(200, 200, 120));
+    }
+    while (row_start < row_end)
+    {
+        if (cur_col > map->len * TILE_SIZE || row_start > (map->size - 1) * TILE_SIZE || cur_col < 0 || row_start < 0)
             break;
         draw_to_img(&(map->img), cur_col, row_start, chimicolor(120, 120, 120));
-        proj_height--;
+        // proj_height--;
+        row_start++;
+    }
+    while (row_start <= (map->size) * TILE_SIZE)
+    {
+        // if (cur_col > map->len * TILE_SIZE || row_start > (map->size - 1) * TILE_SIZE || cur_col < 0 || row_start < 0)
+        //     break;
+        draw_to_img(&(map->img), cur_col, row_start, chimicolor(50, 20, 120));
+        // proj_height--;
         row_start++;
     }
     cur_col++;
+    one_liner(map, (hoz < ver) ? hoz : ver, angle);
     if (cur_col == (map->len - 1) * TILE_SIZE)
         cur_col = 0;
 
