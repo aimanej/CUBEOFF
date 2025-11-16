@@ -1,40 +1,40 @@
 #include "cub3d.h"
 
-double hoz_distance(t_map *map, double view_angle)
+double hoz_distance(t_map *map, double view_angle, int face_du, int face_lr)
 {
     t_ray ray = map->player.ray;
     // first horizontal intersection
     double col_inter = 0;
     double row_inter = floor(map->player.center_pos.row / TILE_SIZE) * TILE_SIZE;
-    if (map->player.face_du == DOWN)
+    if (face_du == DOWN)
         row_inter += TILE_SIZE;
     double opp = 0;
-    if (map->player.face_du == UP)
+    if (face_du == UP)
         opp = map->player.center_pos.row - row_inter;
-    else if (map->player.face_du == DOWN)
+    else if (face_du == DOWN)
         opp = row_inter - map->player.center_pos.row;
     if (fabs(sin(view_angle)) < 0.0001)
-        return 0;
+        return INFINITY;
     double tanner = tan(view_angle);
     // printf("tan ---- > %f\n", tanner);
     double adj = opp / tanner;
-    if (map->player.face_du == UP)
+    if (face_du == UP)
         adj *= -1;
     col_inter = map->player.center_pos.col + adj;
 
     // step calculation
     double row_step = TILE_SIZE;
     double col_step = row_step / tanner;
-    if (map->player.face_du == UP)
+    if (face_du == UP)
     {
         row_step *= -1;
     }
-    if (map->player.face_lr == LEFT)
+    if (face_lr == LEFT && col_step > 0)
         col_step = -fabs(col_step);
-    else if (map->player.face_lr == RIGHT)
+    else if (face_lr == RIGHT && col_step < 0)
         col_step = fabs(col_step);
     int coef = 0;
-    double off = (map->player.face_du == UP) ? -1 : 0;
+    double off = (face_du == UP) ? -1 : 0;
     int a = 0;
 
     // ray to wall inter
@@ -60,40 +60,40 @@ double AB_distance(double rowa, double cola, double rowb, double colb)
     return sqrt(((rowa - rowb) * (rowa - rowb)) + ((cola - colb) * (cola - colb)));
 }
 
-double ver_distance(t_map *map, double view_angle)
+double ver_distance(t_map *map, double view_angle, int face_du, int face_lr)
 {
     t_player player = map->player;
 
     double row_inter = 0;
     double col_inter = floor(player.center_pos.col / TILE_SIZE) * TILE_SIZE;
-    if (player.face_lr == RIGHT)
+    if (face_lr == RIGHT)
         col_inter += TILE_SIZE;
     double adj = 0;
-    if (player.face_lr == RIGHT)
+    if (face_lr == RIGHT)
         adj = col_inter - player.center_pos.col;
-    else if (player.face_lr == LEFT)
+    else if (face_lr == LEFT)
         adj = player.center_pos.col - col_inter;
 
-    if (fabs(sin(view_angle)) == 1)
-        return 0;
+    if (fabs(cos(view_angle)) < 0.0001)
+        return INFINITY;
     // if (map->player.face_du == UP)
     //     adj *= -1;
     double opp = fabs(tan(view_angle) * adj);
-    if (player.face_du == UP)
+    if (face_du == UP)
         row_inter = player.center_pos.row - opp;
-    else if (player.face_du == DOWN)
+    else if (face_du == DOWN)
         row_inter = player.center_pos.row + opp;
 
     double col_step = TILE_SIZE;
     double row_step = tan(view_angle) * TILE_SIZE;
-    if (player.face_lr == LEFT)
+    if (face_lr == LEFT)
         col_step *= -1;
-    if (player.face_du == UP)
+    if (face_du == UP)
         row_step = -fabs(row_step);
-    else if (player.face_du == DOWN)
+    else if (face_du == DOWN)
         row_step = fabs(row_step);
     int coef = 0;
-    double off = (map->player.face_lr == LEFT) ? -1 : 0;
+    double off = (face_lr == LEFT) ? -1 : 0;
     int a = 0;
     while (!wall_check(map, row_inter, col_inter + off))
     {

@@ -46,7 +46,7 @@ void intializer(t_mlx *mlx)
     mlx->map.player.pos.col = 0;
     mlx->map.player.radius = 3;
     mlx->map.player.rotation_speed = 0.5 * (PI / 180);
-    mlx->map.player.view_angle = 70 * (PI / 180);
+    mlx->map.player.view_angle = 0 * (PI / 180);
     if(mlx->map.player.view_angle > 0 && mlx->map.player.view_angle < PI)
         mlx->map.player.face_du = DOWN;
     else

@@ -93,13 +93,14 @@ void drawmap(t_mlx *mlx)
     // draw_line(&(mlx->map));
     mother_cast(&(mlx->map));
     // cast_rays(&(mlx->map), mlx->map.player.view_angle);
+    // cast_rays(&(mlx->map), mlx->map.player.view_angle);
     mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->map.img.img_ptr, 0, 0);
 }
 
 int wall_check(t_map *map, double row, double col)
 {
-    int coll = ceil((int)col / TILE_SIZE);
-    int roww = ceil((int)row / TILE_SIZE);
+    int coll = floor((int)(col / TILE_SIZE));
+    int roww = floor((int)(row / TILE_SIZE));
     // printf("coll : %d roww %d position checked : %c\n", coll, roww, map->map[roww][coll]);
 
     if (coll <= 0 || coll >= map->len - 1 || roww <= 0 || roww >= map->size - 1 || map->map[roww][coll] == '1')
@@ -120,6 +121,16 @@ void one_liner(t_map *map, double distance, double angle)
     // printf("distances checked : ab : %f == dis : %f \n", ab , distance);
     while (ab < distance)
     {
+        if (col_next < 0 || row_next < 0 || col_next > (map->len - 1) * TILE_SIZE || row_next > map->size * TILE_SIZE)
+        {
+            // printf("me nigga : col : %f row %f\n", col_next, row_next);
+            break;
+        }
+        // int rc = (int)(row_next) / TILE_SIZE;
+
+        // if(map->map[(int)(row_next) / TILE_SIZE][(int)col_next / TILE_SIZE] == '1')
+        //     break;
+        // printf("col %f , col int %d \n", col_next, (int)col_next);
         draw_to_img(&(map->img), col_next * SCALE, row_next * SCALE, chimicolor(155, 155, 155));
         row_next += sin(angle);
         col_next += cos(angle);
@@ -133,7 +144,7 @@ void mother_cast(t_map *map)
     double fov = py.fov;
     double screenw = (map->len - 1) * TILE_SIZE;
     double ang_start = py.view_angle - (fov / 2);
-    double ray_n = screenw;
+    int ray_n = screenw;
     double step = fov / ray_n;
 
     int t = 0;
@@ -141,23 +152,42 @@ void mother_cast(t_map *map)
     while (ray_n > 0)
     {
         double current_ang = ang_start + step * t;
+        current_ang = fmod(current_ang, 2 * PI);
+        if (current_ang < 0)
+            current_ang += 2 * PI;
+        // current_ang = fmod(current_ang, (2 * PI));
         // double hoz = hoz_distance(map, current_ang);
         // double ver = ver_distance(map, current_ang);
+        // printf("current angl : %f\n", ang_start);
         cast_rays(map, current_ang);
+        // cast_rays(map, py.view_angle);
         ray_n--;
         t++;
     }
-    // printf("FOV %f angle start %f stepss %f , number of rays %f\n", fov, ang_start, step, ray_n);
+    // // printf("FOV %f angle start %f stepss %f , number of rays %f\n", fov, ang_start, step, ray_n);
 }
 
 void cast_rays(t_map *map, double angle)
 {
     t_player *player = &(map->player);
     static int cur_col;
-    double hoz = hoz_distance(map, angle);
-    double ver = ver_distance(map, angle);
 
-    // printf("hoz %f , ver %f\n", hoz, ver);
+    int face_lr = 0;
+    int face_du = 0;
+    if (angle > (PI / 2) && angle < (3 * PI) / 2)
+        face_lr = LEFT;
+    else
+        face_lr = RIGHT;
+    if (angle >= 0 && angle <= PI)
+        face_du = DOWN;
+    else
+        face_du = UP;
+
+    double hoz = hoz_distance(map, angle, face_du, face_lr);
+    double ver = ver_distance(map, angle, face_du, face_lr);
+
+    // if (cur_col == ((map->len - 1) * TILE_SIZE - 1))
+    printf("hoz %f , ver %f\n", hoz, ver);
 
     one_liner(map, (hoz < ver) ? hoz : ver, angle);
 
@@ -170,18 +200,20 @@ void cast_rays(t_map *map, double angle)
 
     if (proj_height > (TILE_SIZE * map->size) - 10)
         return;
-    
+
     int row_start = ((TILE_SIZE * (map->size - 1)) / 2) - proj_height / 2;
 
-    printf("distance :%f  hight : %f row start %f \n", wall_distance, proj_height, row_start);
+    // printf("distance :%f  hight : %f row start %f \n", wall_distance, proj_height, row_start);
     while (proj_height > 0)
     {
+        if(cur_col > map->len * TILE_SIZE || row_start > (map->size - 1) * TILE_SIZE || cur_col < 0 || row_start < 0)
+            break;
         draw_to_img(&(map->img), cur_col, row_start, chimicolor(120, 120, 120));
         proj_height--;
         row_start++;
     }
     cur_col++;
-    if(cur_col == (map->len - 1) * TILE_SIZE)
+    if (cur_col == (map->len - 1) * TILE_SIZE)
         cur_col = 0;
 
     // printf("")
