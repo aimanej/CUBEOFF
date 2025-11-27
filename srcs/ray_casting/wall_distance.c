@@ -1,8 +1,10 @@
-#include "cub3d.h"
+#include "../../includes/cub3d.h"
+
+
 
 double hoz_distance(t_map *map, double view_angle, int face_du, int face_lr)
 {
-    t_ray ray = map->player.ray;
+    // t_ray ray = map->player.ray;
     // first horizontal intersection
     double col_inter = 0;
     double row_inter = floor(map->player.center_pos.row / TILE_SIZE) * TILE_SIZE;
@@ -33,6 +35,8 @@ double hoz_distance(t_map *map, double view_angle, int face_du, int face_lr)
         col_step = -fabs(col_step);
     else if (face_lr == RIGHT && col_step < 0)
         col_step = fabs(col_step);
+
+    //wall check
     int coef = 0;
     double off = (face_du == UP) ? -1 : 0;
     int a = 0;
@@ -64,6 +68,8 @@ double ver_distance(t_map *map, double view_angle, int face_du, int face_lr)
 {
     t_player player = map->player;
 
+    //first vertical intersection 
+
     double row_inter = 0;
     double col_inter = floor(player.center_pos.col / TILE_SIZE) * TILE_SIZE;
     if (face_lr == RIGHT)
@@ -83,6 +89,8 @@ double ver_distance(t_map *map, double view_angle, int face_du, int face_lr)
         row_inter = player.center_pos.row - opp;
     else if (face_du == DOWN)
         row_inter = player.center_pos.row + opp;
+        
+        ///step calculaction 
 
     double col_step = TILE_SIZE;
     double row_step = tan(view_angle) * TILE_SIZE;
@@ -92,6 +100,9 @@ double ver_distance(t_map *map, double view_angle, int face_du, int face_lr)
         row_step = -fabs(row_step);
     else if (face_du == DOWN)
         row_step = fabs(row_step);
+
+    //distance calculation 
+    
     int coef = 0;
     double off = (face_lr == LEFT) ? -1 : 0;
     int a = 0;

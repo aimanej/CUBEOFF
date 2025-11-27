@@ -1,5 +1,5 @@
 
-#include "cub3d.h"
+#include "../../includes/cub3d.h"
 
 void player_update(t_map *map)
 

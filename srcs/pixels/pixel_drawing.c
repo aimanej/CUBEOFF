@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../../includes/cub3d.h"
 
 int chimicolor(int r, int g, int b)
 {
@@ -152,6 +152,17 @@ void one_liner(t_map *map, double distance, double angle)
         // printf("was here:");
     }
 }
+
+double normalize_angle(double angle)
+{
+    angle = fmod(angle, 2 * PI);
+    if (angle < 0)
+        angle += 2 * PI;
+    return angle;
+}
+
+
+
 void mother_cast(t_map *map)
 {
     t_player py = map->player;
@@ -162,24 +173,18 @@ void mother_cast(t_map *map)
     double step = fov / ray_n;
 
     int t = 0;
-    // printf("rys : %f current %f \n", ray_n, ang_start);
+   
     while (ray_n > 0)
     {
         double current_ang = ang_start + step * t;
-        current_ang = fmod(current_ang, 2 * PI);
-        if (current_ang < 0)
-            current_ang += 2 * PI;
-        // current_ang = fmod(current_ang, (2 * PI));
-        // double hoz = hoz_distance(map, current_ang);
-        // double ver = ver_distance(map, current_ang);
-        // printf("current angl : %f\n", ang_start);
+        current_ang = normalize_angle(current_ang);
         cast_rays(map, current_ang);
-        // cast_rays(map, py.view_angle);
         ray_n--;
         t++;
     }
     // // printf("FOV %f angle start %f stepss %f , number of rays %f\n", fov, ang_start, step, ray_n);
 }
+
 
 void cast_rays(t_map *map, double angle)
 {
@@ -200,7 +205,7 @@ void cast_rays(t_map *map, double angle)
     double hoz = hoz_distance(map, angle, face_du, face_lr);
     double ver = ver_distance(map, angle, face_du, face_lr);
 
-    printf("hoz %f , ver %f\n", hoz, ver);
+    // printf("hoz %f , ver %f\n", hoz, ver);
 
     // wall strip hight calculation
 
@@ -215,7 +220,7 @@ void cast_rays(t_map *map, double angle)
 
     if (proj_height > TILE_SIZE * map->size)
     {
-        printf("washere\n\n");
+        // printf("washere\n\n");
         proj_height = TILE_SIZE * map->size;
     }
 
@@ -233,13 +238,15 @@ void cast_rays(t_map *map, double angle)
     {
         if (cur_col > map->len * TILE_SIZE || ceil > (map->size - 1) * TILE_SIZE || cur_col < 0 || ceil < 0)
             break;
-        draw_to_img(&(map->img), cur_col, ceil, chimicolor(200, 200, 120));
+        draw_to_img(&(map->img), cur_col, ceil, chimicolor(0, 20, 120));
     }
+
+    int grad = (TILE_SIZE * map->size / proj_height) * 4;
     while (row_start < row_end)
     {
         if (cur_col > map->len * TILE_SIZE || row_start > (map->size - 1) * TILE_SIZE || cur_col < 0 || row_start < 0)
             break;
-        draw_to_img(&(map->img), cur_col, row_start, chimicolor(120, 120, 120));
+        draw_to_img(&(map->img), cur_col, row_start, chimicolor(190 - grad, 20, 20));
         // proj_height--;
         row_start++;
     }
@@ -247,7 +254,7 @@ void cast_rays(t_map *map, double angle)
     {
         // if (cur_col > map->len * TILE_SIZE || row_start > (map->size - 1) * TILE_SIZE || cur_col < 0 || row_start < 0)
         //     break;
-        draw_to_img(&(map->img), cur_col, row_start, chimicolor(50, 20, 120));
+        draw_to_img(&(map->img), cur_col, row_start, chimicolor(100, 100, 100));
         // proj_height--;
         row_start++;
     }

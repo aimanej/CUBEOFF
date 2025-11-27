@@ -1,17 +1,19 @@
-Srcs = get_next_line.c get_next_line_utils.c main.c maprearding.c pixel_drawing.c key_hooks.c player_update.c wall_distance.c
+Srcs = srcs/ray_casting/ray_init.c srcs/gnl/get_next_line.c srcs/gnl/get_next_line_utils.c main.c srcs/gnl/maprearding.c srcs/pixels/pixel_drawing.c srcs/keyhooks/key_hooks.c srcs/pixels/player_update.c 
+
+SRCS_CST = srcs/ray_casting/horizontal.c srcs/ray_casting/vertical.c srcs/ray_casting/wall_distance.c
 
 Flags = -lmlx -lXext -lX11 -lm
 
 Mlx_Path = -L/home/aijadid/Desktop/minilibx-linux
 
-Header = get_next_line.h cub3d.h
+Header = includes/get_next_line.h includes/cub3d.h
 
 Name = cube 
 
 all: $(Name)
 
-$(Name): $(Header) $(Srcs)
-	cc $(Srcs) $(Mlx_Path) $(Flags) -o $(Name)
+$(Name): $(Header) $(Srcs) $(SRCS_CST)
+	cc $(Srcs) $(SRCS_CST) $(Mlx_Path) $(Flags) -o $(Name)
 
 clean:
 	rm -rf $(Name)

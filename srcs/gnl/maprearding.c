@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../../includes/cub3d.h"
 
 char	**parsing(t_map *map_s, char *av)
 {
