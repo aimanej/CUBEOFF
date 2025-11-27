@@ -69,7 +69,8 @@ void drawmap(t_mlx *mlx)
 
     // printf("size : %d\n len : %d\n", mlx->map.size, mlx->map.len);
 
-    mother_cast(&(mlx->map));
+    // mother_cast(&(mlx->map));
+    ray_cast(&(mlx->map));
 
     while (row < mlx->map.size)
     {
@@ -207,11 +208,12 @@ void cast_rays(t_map *map, double angle)
 
     // printf("hoz %f , ver %f\n", hoz, ver);
 
-    // wall strip hight calculation
-
+    
     double wall_distance = (hoz < ver) ? hoz : ver;
-
+    
     double corrected_dist = wall_distance * cos(angle - player->view_angle);
+    
+    // wall strip hight calculation
     double wall_hight = TILE_SIZE;
 
     double proj_dist = (TILE_SIZE * map->size / 2) / tan(player->fov / 2);

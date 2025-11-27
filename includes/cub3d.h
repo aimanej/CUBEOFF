@@ -48,6 +48,8 @@ typedef struct s_ray
     int face_du;
     double tanner;
     double wall_height;
+    int row_start;
+    int row_end;
 } t_ray;
 
 typedef enum e_face
@@ -121,6 +123,8 @@ void ray_direction(t_ray *ray);
 void ray_cast(t_map *map);
 void set_nearest_wall(t_map *map, t_ray *ray);
 void distance_prep(t_map *map);
+void projected_wall_height(t_map *map, t_ray *ray);
+void draw_walls(t_map *map);
 
 //horizontal calculations : 
 void first_hor_inter(t_map *map, t_ray *ray);

@@ -84,6 +84,8 @@ t_ray *newray()
     ray->face_du = 0;
     ray->tanner = 0;
     ray->wall_height = 0;
+    ray->row_start = 0;
+    ray->row_end = 0;
     return ray;
 }
 
@@ -117,7 +119,7 @@ int main()
     // mlx.win = mlx_new_window(mlx.mlx, TILE_SIZE * (ft_strlen(mlx.map.map[0]) - 1), mlx.map.size * TILE_SIZE, "WINDOW");
     mlx.win = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "WINDOW");
     init_ray_arr(&(mlx.map));
-    ray_cast(&(mlx.map));
+    // ray_cast(&(mlx.map));
     int x = 0;
 
     mlx.map.img.img_ptr = mlx_new_image(mlx.mlx, TILE_SIZE * ft_strlen(mlx.map.map[0]), mlx.map.size * TILE_SIZE);

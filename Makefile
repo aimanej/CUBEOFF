@@ -13,7 +13,7 @@ Name = cube
 all: $(Name)
 
 $(Name): $(Header) $(Srcs) $(SRCS_CST)
-	cc $(Srcs) $(SRCS_CST) $(Mlx_Path) $(Flags) -o $(Name)
+	cc -g $(Srcs) $(SRCS_CST) $(Mlx_Path) $(Flags) -o $(Name)
 
 clean:
 	rm -rf $(Name)
