@@ -44,7 +44,7 @@ int press_hook(int keysim, void *data)
     // mlx_destroy_image(mlx->mlx, mlx->map.img.img_ptr);
     // mlx->map.img.img_ptr = mlx_new_image(mlx->mlx, TILE_SIZE * ft_strlen(mlx->map.map[0]), mlx->map.size * TILE_SIZE);
     // mlx->map.img.addr = mlx_get_data_addr(mlx->map.img.img_ptr, &(mlx->map.img.bpp), &(mlx->map.img.line_len), &(mlx->map.img.endian));
-    // drawmap(mlx);
+    // render_func(mlx);
 }
 
 int release_hook(int keysim, void *data)
@@ -70,5 +70,5 @@ int release_hook(int keysim, void *data)
     // mlx_destroy_image(mlx->mlx, mlx->map.img.img_ptr);
     // mlx->map.img.img_ptr = mlx_new_image(mlx->mlx, TILE_SIZE * ft_strlen(mlx->map.map[0]), mlx->map.size * TILE_SIZE);
     // mlx->map.img.addr = mlx_get_data_addr(mlx->map.img.img_ptr, &(mlx->map.img.bpp), &(mlx->map.img.line_len), &(mlx->map.img.endian));
-    // drawmap(mlx);
+    // render_func(mlx);
 }

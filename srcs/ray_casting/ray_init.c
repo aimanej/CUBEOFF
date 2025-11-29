@@ -28,6 +28,7 @@ void set_ray_angles(t_map *map)
     while (map->ray_arr[t])
     {
         map->ray_arr[t]->angle = angle_start + (step * t);
+        map->ray_arr[t]->angle = normalize_angle(map->ray_arr[t]->angle);
         ray_direction(map->ray_arr[t]);
         t++;
     }
@@ -58,6 +59,11 @@ void distance_prep(t_map *map)
     
 }
 
+double AB_distance(double rowa, double cola, double rowb, double colb)
+{
+    return sqrt(((rowa - rowb) * (rowa - rowb)) + ((cola - colb) * (cola - colb)));
+}
+
 void set_nearest_wall(t_map *map, t_ray *ray)
 {
     if (ray->hor_wall_distance < ray->ver_wall_distance)
@@ -81,24 +87,24 @@ void projected_wall_height(t_map *map, t_ray *ray)
 {
     double wall_hight = TILE_SIZE;
 
-    double proj_dist = (TILE_SIZE * map->size / 2) / tan(map->player.fov / 2);
+    double proj_dist = ((WIDTH ) / 2) / tan(map->player.fov / 2);
 
     ray->wall_height = (wall_hight / ray->wall_distance) * proj_dist;
 
-    if (ray->wall_height > TILE_SIZE * map->size)
+    if (ray->wall_height > HEIGHT - 1)
     {
         // printf("washere\n\n");
-        ray->wall_height = TILE_SIZE * map->size;
+        ray->wall_height = HEIGHT - 1;
     }
-    ray->row_start = ((TILE_SIZE * (map->size - 1)) / 2) - ray->wall_height / 2;
+    ray->row_start = (HEIGHT / 2) - ray->wall_height / 2;
     if (ray->row_start < 0)
     {
         // proj_height += row_start;
         ray->row_start = 0;
     }
     ray->row_end = ray->row_start + ray->wall_height;
-    if (ray->row_end > TILE_SIZE * map->size)
-        ray->row_end = TILE_SIZE * map->size;
+    if (ray->row_end > HEIGHT - 1)
+        ray->row_end = HEIGHT - 1;
 }
 
 void draw_walls(t_map *map)
@@ -109,10 +115,10 @@ void draw_walls(t_map *map)
     while (map->ray_arr[t])
     {
         t_ray *ray = map->ray_arr[t];
-        int grad = (TILE_SIZE * map->size / ray->wall_height) * 4;
+        int grad = ((HEIGHT - 1)/ ray->wall_height) * 4;
         while (ray->row_start < ray->row_end)
         {
-            if (cur_col > map->len * TILE_SIZE || ray->row_start > (map->size - 1) * TILE_SIZE || cur_col < 0 || ray->row_start < 0)
+            if (cur_col > WIDTH - 1 || ray->row_start > HEIGHT - 1|| cur_col < 0 || ray->row_start < 0)
                 break;
             draw_to_img(&(map->img), cur_col, ray->row_start, chimicolor(190 - grad, 20, 20));
             ray->row_start++;

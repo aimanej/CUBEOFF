@@ -10,7 +10,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "/home/aijadid/Desktop/minilibx-linux/mlx.h"
+#include "/home/aimane-jadid/Desktop/studies/minilibx-linux/mlx.h"
 
 #define PI 3.14159265358979323846
 
@@ -44,6 +44,7 @@ typedef struct s_ray
     double hor_wall_distance;
     double ver_wall_distance;
     double wall_distance;
+    double texture_col;
     int face_lr;
     int face_du;
     double tanner;
@@ -99,8 +100,8 @@ int map_height(t_map *map_s, char *av);
 
 int chimicolor(int r, int g, int b);
 void draw_to_img(t_image *img, int x, int y, int color);
-void drawmap(t_mlx *mlx);
-void cast_rays(t_map *map, double angle);
+void render_func(t_mlx *mlx);
+// void cast_rays(t_map *map, double angle);
 
 // key hooks
 int hooker(int keysim, void *data);
@@ -108,8 +109,8 @@ int press_hook(int keysim, void *data);
 int release_hook(int keysim, void *data);
 void player_update(t_map *map);
 int wall_check(t_map *map, double row, double col);
-double hoz_distance(t_map *map, double view_angle, int face_du, int face_lr);
-double ver_distance(t_map *map, double view_angle, int face_du, int face_lr);
+// double hoz_distance(t_map *map, double view_angle, int face_du, int face_lr);
+// double ver_distance(t_map *map, double view_angle, int face_du, int face_lr);
 double AB_distance(double rowa, double cola, double rowb, double colb);
 int chimicolor(int r, int g, int b);
 void mother_cast(t_map *map);
@@ -125,6 +126,12 @@ void set_nearest_wall(t_map *map, t_ray *ray);
 void distance_prep(t_map *map);
 void projected_wall_height(t_map *map, t_ray *ray);
 void draw_walls(t_map *map);
+void get_player_pos(t_map *map);
+void map_init(t_mlx *mlx);
+int init_ray_arr(t_map *map);
+int gameloop(void *data);
+void minimap(t_mlx *mlx);
+void draw_player(t_map *map);
 
 //horizontal calculations : 
 void first_hor_inter(t_map *map, t_ray *ray);
@@ -135,6 +142,7 @@ void hor_distance_calc(t_map *map, t_ray *ray);
 void ver_step_calc(t_map *map, t_ray *ray);
 void first_ver_inter(t_map *map, t_ray *ray);
 void ver_distance_calc(t_map *map, t_ray *ray);
+// double AB_distance(double rowa, double cola, double rowb, double colb);
 
 
 #endif

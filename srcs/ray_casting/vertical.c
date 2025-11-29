@@ -14,7 +14,7 @@ void first_ver_inter(t_map *map, t_ray *ray)
 
     // if (fabs(cos(ray->angle)) < 0.0001)
     //     return INFINITY;
-    if (map->player.face_du == UP)
+    if (ray->face_du == UP)
         adj *= -1;
     double opp = fabs(tan(ray->angle) * adj);
     if (ray->face_du == UP)
