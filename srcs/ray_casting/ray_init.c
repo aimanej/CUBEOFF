@@ -38,6 +38,7 @@ void ray_cast(t_map *map)
 {
     set_ray_angles(map);
     distance_prep(map);
+    textures(map);
     draw_walls(map);
 }
 
@@ -116,11 +117,16 @@ void draw_walls(t_map *map)
     {
         t_ray *ray = map->ray_arr[t];
         int grad = ((HEIGHT - 1)/ ray->wall_height) * 4;
+
+        double step = map->tex_height/ ray->wall_height;
+        double tex_row = 0;
         while (ray->row_start < ray->row_end)
         {
             if (cur_col > WIDTH - 1 || ray->row_start > HEIGHT - 1|| cur_col < 0 || ray->row_start < 0)
                 break;
-            draw_to_img(&(map->img), cur_col, ray->row_start, chimicolor(190 - grad, 20, 20));
+            int color = getpixelcolor(map, tex_row, ray->texture_col);
+            tex_row += step;
+            draw_to_img(&(map->img), cur_col, ray->row_start, color);
             ray->row_start++;
         }
         t++;

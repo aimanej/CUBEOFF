@@ -86,6 +86,8 @@ typedef struct s_map
     t_image texture;
     t_player player;
     t_ray **ray_arr;
+    double tex_width;
+    double tex_height;
 } t_map;
 
 typedef struct s_mlx
@@ -117,6 +119,8 @@ void mother_cast(t_map *map);
 double normalize_angle(double angle);
 int ray_initializer(t_map *map, int ray_n);
 double AB_distance(double rowa, double cola, double rowb, double colb);
+int getpixelcolor(t_map *map, int row, int col);
+void textures(t_map *map);
 
 // new
 void set_ray_angles(t_map *map);

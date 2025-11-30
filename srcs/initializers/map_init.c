@@ -21,4 +21,6 @@ void map_init(t_mlx *mlx)
     mlx->map.player.walk_dir = 0;
     mlx->map.player.turn_dir = 0;
     mlx->map.player.fov = 60 * (PI / 180);
+    mlx->map.tex_height = 0;
+    mlx->map.tex_width = 0;
 }

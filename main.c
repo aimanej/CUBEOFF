@@ -26,11 +26,15 @@ int main()
 
     // texture
 
-    int height = 153;
-    int width = 234;
+    int height = 0;
+    int width = 0;
+    
+    mlx.map.texture.img_ptr = mlx_xpm_file_to_image(mlx.mlx, "/home/aimane-jadid/Desktop/studies/cube3d/text.xpm", &width, &height);
+    mlx.map.texture.addr = mlx_get_data_addr(mlx.map.texture.img_ptr, &(mlx.map.texture.bpp), &(mlx.map.texture.line_len), &(mlx.map.texture.endian));
+    mlx.map.tex_height = height;
+    mlx.map.tex_width = width;
 
-    // mlx.map.texture.img_ptr = mlx_xpm_file_to_image(mlx.mlx, "/home/aijadid/Desktop/CUBEOFF/text.xpm", &width, &height);
-    // mlx.map.texture.addr = mlx_get_data_addr(mlx.map.texture.img_ptr, &(mlx.map.texture.bpp), &(mlx.map.texture.line_len), &(mlx.map.texture.endian));
+    printf("length %d \n", height);
     // // printf("position %d\n %d\n", mlx.map.player.pos.x,mlx.map.player.pos.y );
     render_func(&mlx);
     // mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.map.img.img_ptr, 0, 0);
