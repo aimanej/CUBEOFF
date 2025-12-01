@@ -6,16 +6,17 @@ int texture_init(t_mlx *mlx)
     //garbage collector to be added
 
     t_map *map = &(mlx->map);
-    map->tex1.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "../../textures/149.xpm", &(map->tex1.width), &(map->tex1.height));
+    map->tex1.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "/home/aijadid/Desktop/CUBEOFF/textures/149.xpm", &(map->tex1.width), &(map->tex1.height));
+    // printf("width : %p\n",map->tex1.img_ptr  );
     if (!map->tex1.img_ptr)
         return 0;
-    map->tex2.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "../../textures/152.xpm", &(map->tex2.width), &(map->tex2.height));
+    map->tex2.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "/home/aijadid/Desktop/CUBEOFF/textures/152.xpm", &(map->tex2.width), &(map->tex2.height));
     if (!map->tex1.img_ptr)
         return 0;
-    map->tex3.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "../../textures/153.xpm", &(map->tex3.width), &(map->tex3.height));
+    map->tex3.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "/home/aijadid/Desktop/CUBEOFF/textures/153.xpm", &(map->tex3.width), &(map->tex3.height));
     if (!map->tex1.img_ptr)
         return 0;
-    map->tex4.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "../../textures/176.xpm", &(map->tex4.width), &(map->tex4.height));
+    map->tex4.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "/home/aijadid/Desktop/CUBEOFF/textures/176.xpm", &(map->tex4.width), &(map->tex4.height));
     if (!map->tex4.img_ptr)
         return 0;
     

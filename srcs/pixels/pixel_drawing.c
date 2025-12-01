@@ -32,7 +32,7 @@ void mini_rays(t_map *map)
             row += sin(ray->angle);
             col += cos(ray->angle);
         }
-        printf("distance to wall : %f -- distance end loop %f\n", distance, AB_distance(map->player.center_pos.row, map->player.center_pos.col, row, col));
+        // printf("distance to wall : %f -- distance end loop %f\n", distance, AB_distance(map->player.center_pos.row, map->player.center_pos.col, row, col));
         t++;
     }
 }
