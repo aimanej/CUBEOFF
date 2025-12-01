@@ -3,15 +3,18 @@
 
 
 
-int main()
+int main(int ac,char **av)
 {
+    (void) ac;
     t_mlx mlx;
     // t_map map = mlx.map;
     // mlx.map.size = 0;
     map_init(&mlx);
     t_player *pla = &(mlx.map.player);
-    mlx.map.map = parsing(&(mlx.map), "map.txt");
-    get_player_pos(&(mlx.map));
+    // mlx.map.map = parsing(&(mlx.map), "map.txt");
+    // get_player_pos(&(mlx.map));
+
+    parsing(av, &(mlx.map));
     mlx.map.len = ft_strlen(mlx.map.map[0]) - 1;
     
     mlx.map.screenw = WIDTH;

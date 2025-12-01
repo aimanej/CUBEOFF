@@ -136,13 +136,13 @@ void draw_walls(t_map *map)
         int grad = ((HEIGHT - 1)/ ray->wall_height) * 4;
 
         if(ray->compass == NO)
-            step = map->tex1.height / ray->wall_height;
+            step = map->tex_no.height / ray->wall_height;
         else if(ray->compass == SO)
-            step = map->tex2.height / ray->wall_height;
+            step = map->tex_so.height / ray->wall_height;
         else if(ray->compass == EA)
-            step = map->tex3.height / ray->wall_height;
+            step = map->tex_ea.height / ray->wall_height;
         else if(ray->compass == WE)
-            step = map->tex4.height / ray->wall_height;
+            step = map->tex_we.height / ray->wall_height;
         double tex_row = 0;
         while (ray->row_start < ray->row_end)
         {

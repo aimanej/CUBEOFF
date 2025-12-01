@@ -1,7 +1,6 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-#include "get_next_line.h"
 #define TILE_SIZE 64
 #define SCALE 0
 #define WIDTH 1080
@@ -23,6 +22,7 @@ typedef struct t_image
     int endian;
     int width;
     int height;
+    char *path;
 } t_image;
 
 typedef struct s_vec
@@ -87,6 +87,7 @@ typedef struct s_player
     double fov;
     t_face face_du;
     t_face face_lr;
+    char player_dir;
 } t_player;
 
 typedef struct s_map
@@ -96,10 +97,10 @@ typedef struct s_map
     int len;
     double screenw;
     t_image img;
-    t_image tex1;
-    t_image tex2;
-    t_image tex3;
-    t_image tex4;
+    t_image tex_no;
+    t_image tex_so;
+    t_image tex_ea;
+    t_image tex_we;
     t_player player;
     t_ray **ray_arr;
 } t_map;
@@ -111,7 +112,7 @@ typedef struct s_mlx
     t_map map;
 } t_mlx;
 
-char **parsing(t_map *map_s, char *av);
+// char **parsing(t_map *map_s, char *av);
 int map_height(t_map *map_s, char *av);
 
 int chimicolor(int r, int g, int b);
@@ -164,6 +165,6 @@ void ver_step_calc(t_map *map, t_ray *ray);
 void first_ver_inter(t_map *map, t_ray *ray);
 void ver_distance_calc(t_map *map, t_ray *ray);
 // double AB_distance(double rowa, double cola, double rowb, double colb);
-
+#include "../parsing/cub.h"
 
 #endif
