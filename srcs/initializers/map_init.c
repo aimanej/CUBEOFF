@@ -2,6 +2,7 @@
 
 void map_init(t_mlx *mlx)
 {
+    bzero(&(mlx->map), sizeof(mlx->map));
     mlx->map.player.move_speed = 2;
     mlx->map.player.pos.row = 0;
     mlx->map.player.pos.col = 0;

@@ -2,7 +2,7 @@
 #define CUB3D_H
 
 #define TILE_SIZE 64
-#define SCALE 0
+#define SCALE 0.3
 #define WIDTH 1080
 #define HEIGHT 720
 // #define
@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "/home/aijadid/Desktop/minilibx-linux/mlx.h"
+ #include <strings.h>
 
 #define PI 3.14159265358979323846
 
