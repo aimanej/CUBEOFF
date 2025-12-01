@@ -38,8 +38,24 @@ void ray_cast(t_map *map)
 {
     set_ray_angles(map);
     distance_prep(map);
-    textures(map);
+    texture_col_int(map);
     draw_walls(map);
+}
+
+void set_compass(t_map *map, t_ray *ray)
+{
+    if(ray->face_du == UP && (ray->hor_wall_distance < ray->ver_wall_distance))
+    {
+        ray->compass = NO;
+    }
+    if(ray->face_du == DOWN && (ray->hor_wall_distance < ray->ver_wall_distance))
+        ray->compass = SO;
+    
+    if((ray->hor_wall_distance > ray->ver_wall_distance) && ray->ver_inter_col > map->player.center_pos.col)
+        ray->compass = EA;
+    if((ray->hor_wall_distance > ray->ver_wall_distance) && ray->ver_inter_col < map->player.center_pos.col)
+        ray->compass = WE;    
+
 }
 
 void distance_prep(t_map *map)
@@ -54,6 +70,7 @@ void distance_prep(t_map *map)
         hor_distance_calc(map, map->ray_arr[t]);
         ver_distance_calc(map, map->ray_arr[t]);
         set_nearest_wall(map, map->ray_arr[t]);
+        set_compass(map, map->ray_arr[t]);
         projected_wall_height(map, map->ray_arr[t]);
         t++;
     }
@@ -112,21 +129,28 @@ void draw_walls(t_map *map)
 {
     int t = 0;
     int cur_col = 0;
-
+    double step = 0;
     while (map->ray_arr[t])
     {
         t_ray *ray = map->ray_arr[t];
         int grad = ((HEIGHT - 1)/ ray->wall_height) * 4;
 
-        double step = map->tex_height/ ray->wall_height;
+        if(ray->compass == NO)
+            step = map->tex1.height / ray->wall_height;
+        else if(ray->compass == SO)
+            step = map->tex2.height / ray->wall_height;
+        else if(ray->compass == EA)
+            step = map->tex3.height / ray->wall_height;
+        else if(ray->compass == WE)
+            step = map->tex4.height / ray->wall_height;
         double tex_row = 0;
         while (ray->row_start < ray->row_end)
         {
             if (cur_col > WIDTH - 1 || ray->row_start > HEIGHT - 1|| cur_col < 0 || ray->row_start < 0)
                 break;
-            int color = getpixelcolor(map, tex_row, ray->texture_col);
+            int color = getpixelcolor(map, ray,  tex_row, ray->texture_col);
             tex_row += step;
-            draw_to_img(&(map->img), cur_col, ray->row_start, color);
+            draw_to_img(&(map->img), ray->row_start, cur_col, color);
             ray->row_start++;
         }
         t++;

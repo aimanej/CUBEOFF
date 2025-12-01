@@ -3,14 +3,14 @@
 
 #include "get_next_line.h"
 #define TILE_SIZE 64
-#define SCALE 0.2
+#define SCALE 0
 #define WIDTH 1080
 #define HEIGHT 720
 // #define
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "/home/aimane-jadid/Desktop/studies/minilibx-linux/mlx.h"
+#include "/home/aijadid/Desktop/minilibx-linux/mlx.h"
 
 #define PI 3.14159265358979323846
 
@@ -21,6 +21,8 @@ typedef struct t_image
     int bpp;
     int line_len;
     int endian;
+    int width;
+    int height;
 } t_image;
 
 typedef struct s_vec
@@ -28,6 +30,15 @@ typedef struct s_vec
     double row;
     double col;
 } t_vec;
+
+typedef enum e_wall
+{
+    NO,
+    SO,
+    EA,
+    WE,
+} t_wall;
+
 typedef struct s_ray
 {
     double angle;
@@ -51,6 +62,7 @@ typedef struct s_ray
     double wall_height;
     int row_start;
     int row_end;
+    t_wall compass;
 } t_ray;
 
 typedef enum e_face
@@ -60,6 +72,7 @@ typedef enum e_face
     LEFT,
     RIGHT,
 } t_face;
+
 
 typedef struct s_player
 {
@@ -83,11 +96,12 @@ typedef struct s_map
     int len;
     double screenw;
     t_image img;
-    t_image texture;
+    t_image tex1;
+    t_image tex2;
+    t_image tex3;
+    t_image tex4;
     t_player player;
     t_ray **ray_arr;
-    double tex_width;
-    double tex_height;
 } t_map;
 
 typedef struct s_mlx
@@ -101,7 +115,7 @@ char **parsing(t_map *map_s, char *av);
 int map_height(t_map *map_s, char *av);
 
 int chimicolor(int r, int g, int b);
-void draw_to_img(t_image *img, int x, int y, int color);
+void draw_to_img(t_image *img, int row, int col, int color);
 void render_func(t_mlx *mlx);
 // void cast_rays(t_map *map, double angle);
 
@@ -119,8 +133,9 @@ void mother_cast(t_map *map);
 double normalize_angle(double angle);
 int ray_initializer(t_map *map, int ray_n);
 double AB_distance(double rowa, double cola, double rowb, double colb);
-int getpixelcolor(t_map *map, int row, int col);
-void textures(t_map *map);
+int getpixelcolor(t_map *map,t_ray *ray, int row, int col);
+void texture_col_int(t_map *map);
+int texture_init(t_mlx *mlx);
 
 // new
 void set_ray_angles(t_map *map);
@@ -136,6 +151,8 @@ int init_ray_arr(t_map *map);
 int gameloop(void *data);
 void minimap(t_mlx *mlx);
 void draw_player(t_map *map);
+void mini_rays(t_map *map);
+void set_compass(t_map *map, t_ray *ray);
 
 //horizontal calculations : 
 void first_hor_inter(t_map *map, t_ray *ray);

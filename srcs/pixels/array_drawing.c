@@ -7,11 +7,11 @@ int chimicolor(int r, int g, int b)
 }
 
 
-void draw_to_img(t_image *img, int x, int y, int color)
+void draw_to_img(t_image *img, int row, int col, int color)
 {
     char *ptr;
 
-    ptr = img->addr + (img->line_len * y) + (x * (img->bpp / 8));
+    ptr = img->addr + (img->line_len * row) + (col * (img->bpp / 8));
     *(int *)ptr = color;
 }
 

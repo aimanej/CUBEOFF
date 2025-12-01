@@ -17,7 +17,7 @@ void minimap(t_mlx *mlx)
                     for (int b = 0; b < TILE_SIZE - 3; b++)
                     {
 
-                        draw_to_img(&(mlx->map.img), ((col * TILE_SIZE) + a) * SCALE, ((row * TILE_SIZE) + b) * SCALE, chimicolor(160, 27, 12));
+                        draw_to_img(&(mlx->map.img),  ((row * TILE_SIZE) + b) * SCALE, ((col * TILE_SIZE) + a) * SCALE, chimicolor(160, 27, 12));
                     }
                 }
             }
@@ -28,7 +28,7 @@ void minimap(t_mlx *mlx)
                     for (int b = 0; b < TILE_SIZE - 3; b++)
                     {
 
-                        draw_to_img(&(mlx->map.img), ((col * TILE_SIZE) + a) * SCALE, ((row * TILE_SIZE) + b) * SCALE, chimicolor(120, 7, 12));
+                        draw_to_img(&(mlx->map.img), ((row * TILE_SIZE) + b) * SCALE, ((col * TILE_SIZE) + a) * SCALE, chimicolor(120, 7, 12));
                     }
                 }
             }
@@ -53,14 +53,10 @@ void draw_player(t_map *map)
             // Draw circle using distance formula
             if (dx * dx + dy * dy <= radius * radius)
             {
-                draw_to_img(&(map->img), (center_x + dx) * SCALE, (center_y + dy) * SCALE, chimicolor(224, 33, 5));
+                draw_to_img(&(map->img),  (center_y + dy) * SCALE, (center_x + dx) * SCALE, chimicolor(224, 33, 5));
             }
         }
     }
-    // for(int f = 0; f <= 40; f++)
-    // {
-    //     int nextx = cos()
-    // }
 }
 
 void draw_line(t_map *map)
