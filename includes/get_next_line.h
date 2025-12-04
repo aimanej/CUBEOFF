@@ -3,34 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aijadid <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aijadid <aijadid@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 20:58:43 by aijadid           #+#    #+#             */
-/*   Updated: 2024/12/10 15:48:04 by aijadid          ###   ########.fr       */
+/*   Created: 2024/12/15 22:12:30 by ayboudya          #+#    #+#             */
+/*   Updated: 2025/12/04 18:36:12 by aijadid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 2
-# endif
-
 # include <fcntl.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
-size_t	ft_strlen(const char *str);
-char	*ft_strdup(const char *s);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strchr(char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);
-int		newline(char *str);
-int		read_and_store(int fd, char **buf, char **store);
-char	*extract_line_tmp_update(char **store, char **tmp, int r);
+int		ft_strcmp(char *str1, char *str2);
+char	*ft_substr(char *s, unsigned int start, size_t len);
+char	*ft_strdup(char *str);
+size_t	ft_strlen(char *str);
 char	*get_next_line(int fd);
-void	checker(char **tmp, char **store);
-
-
+char	*test2(char *line);
+char	*test(char *line);
+char	*read_f(int fd, char *holder);
 #endif

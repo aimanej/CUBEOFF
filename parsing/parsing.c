@@ -1,4 +1,4 @@
-#include "cub.h"
+#include "../includes/cub.h"
 
 void    error(char *message)
 {

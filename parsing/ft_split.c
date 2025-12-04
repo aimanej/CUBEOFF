@@ -1,4 +1,4 @@
-#include "cub.h"
+#include "../includes/cub.h"
 
 static int	count_words(const char *s, char c)
 {

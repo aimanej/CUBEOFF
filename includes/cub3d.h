@@ -2,7 +2,7 @@
 #define CUB3D_H
 
 #define TILE_SIZE 64
-#define SCALE 0.3
+#define SCALE 0.1
 #define WIDTH 1080
 #define HEIGHT 720
 // #define
@@ -13,6 +13,12 @@
  #include <strings.h>
 
 #define PI 3.14159265358979323846
+
+
+typedef struct s_garbage{
+    void *ptr;
+    struct s_garbage *next;
+} t_garbage;
 
 typedef struct t_image
 {
@@ -156,6 +162,10 @@ void draw_player(t_map *map);
 void mini_rays(t_map *map);
 void set_compass(t_map *map, t_ray *ray);
 
+// /garbage collector
+void *ft_malloc(size_t size);
+void ft_free_all();
+
 //horizontal calculations : 
 void first_hor_inter(t_map *map, t_ray *ray);
 void hor_step_calc(t_map *map, t_ray *ray);
@@ -166,6 +176,6 @@ void ver_step_calc(t_map *map, t_ray *ray);
 void first_ver_inter(t_map *map, t_ray *ray);
 void ver_distance_calc(t_map *map, t_ray *ray);
 // double AB_distance(double rowa, double cola, double rowb, double colb);
-#include "../parsing/cub.h"
+#include "cub.h"
 
 #endif

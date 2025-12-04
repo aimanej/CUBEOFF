@@ -6,11 +6,11 @@
 /*   By: aijadid <aijadid@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 22:12:13 by ayboudya          #+#    #+#             */
-/*   Updated: 2025/12/01 22:54:38 by aijadid          ###   ########.fr       */
+/*   Updated: 2025/12/04 19:02:09 by aijadid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../../includes/get_next_line.h"
 
 size_t	ft_strlen(char *str)
 {

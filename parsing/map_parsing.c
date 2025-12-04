@@ -1,4 +1,4 @@
-#include "cub.h"
+#include "../includes/cub.h"
 
 int is_surrounded_by_walls(t_map *map)
 {
@@ -30,6 +30,25 @@ int is_surrounded_by_walls(t_map *map)
     return 0;
 }
 
+
+char	*ft_strdup1(char *str)
+{
+	int		i;
+	char	*res;
+
+	i = 0;
+	res = ft_malloc(ft_strlen(str) + 1);
+	if (!res)
+		return (NULL);
+	while (str[i])
+	{
+		res[i] = str[i];
+		i++;
+	}
+	res[i] = 0;
+	return (res);
+}
+
 void allocate_map(t_map *map, char *filename)
 {
     char *line;
@@ -43,13 +62,14 @@ void allocate_map(t_map *map, char *filename)
         printf("ERROR/open");
         exit(1);
     }
-    map->map = malloc(map->size * sizeof(char *));
+    printf("map size : %d \n", map->size);
+    map->map = ft_malloc((map->size + 1) * sizeof(char *));
     line = get_next_line(fd);
     while(line)
     {
         if(is_map(line))
         {
-            map->map[i] = ft_strdup(line);
+            map->map[i] = ft_strdup1(line);
             i++;
         }
         free(line);

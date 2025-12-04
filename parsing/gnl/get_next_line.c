@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayboudya <ayboudya@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aijadid <aijadid@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 21:07:11 by ayboudya          #+#    #+#             */
-/*   Updated: 2025/11/19 05:06:24 by ayboudya         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:43:02 by aijadid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../../includes/get_next_line.h"
 
 char	*read_f(int fd, char *holder)
 {

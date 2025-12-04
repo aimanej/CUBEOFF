@@ -10,10 +10,7 @@ void first_hor_inter(t_map *map, t_ray *ray)
         opp = map->player.center_pos.row - ray->hor_inter_row;
     else if (ray->face_du == DOWN)
         opp = ray->hor_inter_row - map->player.center_pos.row;
-    // if (fabs(sin(ray->angle)) < 0.0001)
-    //     return INFINITY;
     ray->tanner = tan(ray->angle);
-    // printf("tan ---- > %f\n", tanner);
     double adj = opp / ray->tanner;
     if (ray->face_du == UP)
         adj *= -1;

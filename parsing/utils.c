@@ -1,4 +1,4 @@
-#include "cub.h"
+#include "../includes/cub.h"
 
 char    *skip_Spaces(char *str)
 {

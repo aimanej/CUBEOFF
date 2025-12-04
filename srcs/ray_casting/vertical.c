@@ -11,9 +11,6 @@ void first_ver_inter(t_map *map, t_ray *ray)
         adj = ray->ver_inter_col - map->player.center_pos.col;
     else if (ray->face_lr == LEFT)
         adj = map->player.center_pos.col - ray->ver_inter_col;
-
-    // if (fabs(cos(ray->angle)) < 0.0001)
-    //     return INFINITY;
     if (ray->face_du == UP)
         adj *= -1;
     double opp = fabs(tan(ray->angle) * adj);

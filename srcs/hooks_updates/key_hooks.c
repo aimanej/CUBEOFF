@@ -3,16 +3,18 @@
 int hooker(int keysim, void *data)
 {
     t_mlx *mlx = data;
+    printf("%d\n", keysim);
     if (keysim == 65307)
     {
 
+        printf("made it here\n");
+        ft_free_all();
         mlx_loop_end(mlx->mlx);
     }
     // if(keysim == 65361)
     // {
     //     mlx->map.player
     // }
-    // printf("%d\n", keysim);
     return 0;
 }
 
@@ -39,6 +41,8 @@ int press_hook(int keysim, void *data)
     {
 
         mlx_loop_end(mlx->mlx);
+        printf("made it here\n");
+        ft_free_all();
     }
     // player_update(&(mlx->map.player));
     // mlx_destroy_image(mlx->mlx, mlx->map.img.img_ptr);

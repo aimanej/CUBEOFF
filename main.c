@@ -11,24 +11,13 @@ int main(int ac,char **av)
     // mlx.map.size = 0;
     map_init(&mlx);
     t_player *pla = &(mlx.map.player);
-    // mlx.map.map = parsing(&(mlx.map), "map.txt");
-    // get_player_pos(&(mlx.map));
-
     parsing(av, &(mlx.map));
-    mlx.map.len = ft_strlen(mlx.map.map[0]) - 1;
-    
+    mlx.map.len = ft_strlen(mlx.map.map[0]) - 1;    
     mlx.map.screenw = WIDTH;
-    // mlx.map.screenw = (mlx.map.len - 1) * TILE_SIZE;
     mlx.mlx = mlx_init();
-    // mlx.win = mlx_new_window(mlx.mlx, TILE_SIZE * (ft_strlen(mlx.map.map[0]) - 1), mlx.map.size * TILE_SIZE, "WINDOW");
     mlx.win = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "WINDOW");
     init_ray_arr(&(mlx.map));
     texture_init(&(mlx));
-    // ray_cast(&(mlx.map));
-    // int x = 0;
-
-    // mlx.map.img.img_ptr = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
-    // mlx.map.img.addr = mlx_get_data_addr(mlx.map.img.img_ptr, &(mlx.map.img.bpp), &(mlx.map.img.line_len), &(mlx.map.img.endian));
 
     // texture
     render_func(&mlx);

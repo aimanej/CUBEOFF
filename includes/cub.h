@@ -4,10 +4,9 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "./gnl/get_next_line.h"
+#include "get_next_line.h"
 
-#include "../includes/cub3d.h"
-
+#include "cub3d.h"
 
 typedef struct s_data
 {

@@ -109,7 +109,9 @@ void projected_wall_height(t_map *map, t_ray *ray)
 
     ray->wall_height = (wall_hight / ray->wall_distance) * proj_dist;
 
-    if (ray->wall_height > HEIGHT - 1)
+    // ray->wall_height /= HEIGHT;
+
+    if (ray->wall_height >= HEIGHT - 1)
     {
         // printf("washere\n\n");
         ray->wall_height = HEIGHT - 1;
@@ -144,6 +146,7 @@ void draw_walls(t_map *map)
         else if(ray->compass == WE)
             step = map->tex_we.height / ray->wall_height;
         double tex_row = 0;
+        // printf("wall height : %f\n", ray->wall_height);
         while (ray->row_start < ray->row_end)
         {
             if (cur_col > WIDTH - 1 || ray->row_start > HEIGHT - 1|| cur_col < 0 || ray->row_start < 0)

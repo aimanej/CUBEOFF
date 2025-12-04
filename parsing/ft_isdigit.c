@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayboudya <ayboudya@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aijadid <aijadid@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:30:29 by ayboudya          #+#    #+#             */
-/*   Updated: 2025/11/05 13:12:03 by ayboudya         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:41:38 by aijadid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../includes/cub.h"
 
 int	ft_isdigit(int c)
 {
