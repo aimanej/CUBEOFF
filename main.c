@@ -1,7 +1,17 @@
 #include "includes/cub3d.h"
 
 
-
+void destroy_images(t_mlx *mlx)
+{
+    int t = 0;
+    t_map *map = &(mlx->map);
+    while(t <= 3)
+    {
+        mlx_destroy_image(mlx->mlx, map->textures[t].img_ptr);
+        t++;
+    }
+    mlx_destroy_image(mlx->mlx, map->img.img_ptr);
+}
 
 int main(int ac,char **av)
 {
@@ -27,6 +37,8 @@ int main(int ac,char **av)
     mlx_loop_hook(mlx.mlx, (int (*)())gameloop, &mlx);
     // mlx_hook()
     mlx_loop(mlx.mlx);
+    destroy_images(&(mlx));
     mlx_destroy_window(mlx.mlx, mlx.win);
     mlx_destroy_display(mlx.mlx);
+    free(mlx.mlx);
 }

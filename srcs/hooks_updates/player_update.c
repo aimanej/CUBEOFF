@@ -26,15 +26,7 @@ void player_update(t_map *map)
     {
         map->player.view_angle += map->player.rotation_speed * map->player.turn_dir;
         map->player.view_angle = fmod(map->player.view_angle, (2 * PI));
-        if (map->player.view_angle < 0)
-            map->player.view_angle = (2 * PI) + map->player.view_angle;
-        if (map->player.view_angle > 0 && map->player.view_angle < PI)
-            map->player.face_du = DOWN;
-        else
-            map->player.face_du = UP;
-        if (map->player.view_angle >= (PI / 2) && map->player.view_angle <= (3 * PI / 2))
-            map->player.face_lr = LEFT;
-        else
-            map->player.face_lr = RIGHT;
+        map->player.view_angle = normalize_angle(map->player.view_angle);
+        player_direction(&(map->player));
     }
 }

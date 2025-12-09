@@ -12,6 +12,18 @@ void ray_direction(t_ray *ray)
         ray->face_du = UP;
 }
 
+void player_direction(t_player *py)
+{
+    if (py->view_angle > (PI / 2) && py->view_angle < (3 * PI) / 2)
+        py->face_lr = LEFT;
+    else
+        py->face_lr = RIGHT;
+    if (py->view_angle >= 0 && py->view_angle <= PI)
+        py->face_du = DOWN;
+    else
+        py->face_du = UP;
+}
+
 void set_ray_angles(t_map *map)
 {
     t_player player = map->player;
@@ -44,18 +56,17 @@ void ray_cast(t_map *map)
 
 void set_compass(t_map *map, t_ray *ray)
 {
-    if(ray->face_du == UP && (ray->hor_wall_distance < ray->ver_wall_distance))
+    if (ray->face_du == UP && (ray->hor_wall_distance < ray->ver_wall_distance))
     {
         ray->compass = NO;
     }
-    if(ray->face_du == DOWN && (ray->hor_wall_distance < ray->ver_wall_distance))
+    if (ray->face_du == DOWN && (ray->hor_wall_distance < ray->ver_wall_distance))
         ray->compass = SO;
-    
-    if((ray->hor_wall_distance > ray->ver_wall_distance) && ray->ver_inter_col > map->player.center_pos.col)
-        ray->compass = EA;
-    if((ray->hor_wall_distance > ray->ver_wall_distance) && ray->ver_inter_col < map->player.center_pos.col)
-        ray->compass = WE;    
 
+    if ((ray->hor_wall_distance > ray->ver_wall_distance) && ray->ver_inter_col > map->player.center_pos.col)
+        ray->compass = EA;
+    if ((ray->hor_wall_distance > ray->ver_wall_distance) && ray->ver_inter_col < map->player.center_pos.col)
+        ray->compass = WE;
 }
 
 void distance_prep(t_map *map)
@@ -74,7 +85,6 @@ void distance_prep(t_map *map)
         projected_wall_height(map, map->ray_arr[t]);
         t++;
     }
-    
 }
 
 double AB_distance(double rowa, double cola, double rowb, double colb)
@@ -105,7 +115,7 @@ void projected_wall_height(t_map *map, t_ray *ray)
 {
     double wall_hight = TILE_SIZE;
 
-    double proj_dist = ((WIDTH ) / 2) / tan(map->player.fov / 2);
+    double proj_dist = ((WIDTH) / 2) / tan(map->player.fov / 2);
 
     ray->wall_height = (wall_hight / ray->wall_distance) * proj_dist;
 
@@ -135,26 +145,36 @@ void draw_walls(t_map *map)
     while (map->ray_arr[t])
     {
         t_ray *ray = map->ray_arr[t];
-        int grad = ((HEIGHT - 1)/ ray->wall_height) * 4;
+        int grad = ((HEIGHT - 1) / ray->wall_height) * 4;
 
-        if(ray->compass == NO)
-            step = map->tex_no.height / ray->wall_height;
-        else if(ray->compass == SO)
-            step = map->tex_so.height / ray->wall_height;
-        else if(ray->compass == EA)
-            step = map->tex_ea.height / ray->wall_height;
-        else if(ray->compass == WE)
-            step = map->tex_we.height / ray->wall_height;
+        step = map->textures[ray->compass].height / ray->wall_height;
         double tex_row = 0;
+
+        int p = 1;
+        while (p < ray->row_start)
+        {
+            if (cur_col > WIDTH - 1 || p > HEIGHT - 1 || cur_col < 0 || p < 0)
+                break;
+            draw_to_img(&(map->img), p, cur_col, map->ceil_color);
+            p++;
+        }
+        p = 0;
         // printf("wall height : %f\n", ray->wall_height);
         while (ray->row_start < ray->row_end)
         {
-            if (cur_col > WIDTH - 1 || ray->row_start > HEIGHT - 1|| cur_col < 0 || ray->row_start < 0)
+            if (cur_col > WIDTH - 1 || ray->row_start > HEIGHT - 1 || cur_col < 0 || ray->row_start < 0)
                 break;
-            int color = getpixelcolor(map, ray,  tex_row, ray->texture_col);
+            int color = getpixelcolor(map, ray, tex_row, ray->texture_col);
             tex_row += step;
             draw_to_img(&(map->img), ray->row_start, cur_col, color);
             ray->row_start++;
+        }
+        while (ray->row_end < HEIGHT)
+        {
+            if (cur_col > WIDTH - 1 || ray->row_end > HEIGHT - 1 || cur_col < 0 || ray->row_end < 0)
+                break;
+            draw_to_img(&(map->img), ray->row_end, cur_col, map->fl_color);
+            ray->row_end++;
         }
         t++;
         cur_col++;

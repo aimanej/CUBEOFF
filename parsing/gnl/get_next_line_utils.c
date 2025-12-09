@@ -104,10 +104,10 @@ char	*ft_strchr(char *str, int c)
 	while (str[i])
 	{
 		if (str[i] == c)
-			return ((char *)&str[i]);
+			return ((char *)&str[i + 1]);
 		i++;
 	}
 	if (str[i] == c)
-		return ((char *)&str[i]);
+		return ((char *)&str[i + 1]);
 	return (NULL);
 }

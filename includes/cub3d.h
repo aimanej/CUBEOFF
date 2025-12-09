@@ -9,7 +9,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "/home/aijadid/Desktop/minilibx-linux/mlx.h"
+#include "/home/aimane-jadid/Desktop/studies/minilibx-linux/mlx.h"
  #include <strings.h>
 
 #define PI 3.14159265358979323846
@@ -104,12 +104,11 @@ typedef struct s_map
     int len;
     double screenw;
     t_image img;
-    t_image tex_no;
-    t_image tex_so;
-    t_image tex_ea;
-    t_image tex_we;
+    t_image textures[4];
     t_player player;
     t_ray **ray_arr;
+    int fl_color;
+    int ceil_color;
 } t_map;
 
 typedef struct s_mlx
@@ -144,6 +143,7 @@ double AB_distance(double rowa, double cola, double rowb, double colb);
 int getpixelcolor(t_map *map,t_ray *ray, int row, int col);
 void texture_col_int(t_map *map);
 int texture_init(t_mlx *mlx);
+void player_direction(t_player *py);
 
 // new
 void set_ray_angles(t_map *map);
@@ -163,6 +163,7 @@ void mini_rays(t_map *map);
 void set_compass(t_map *map, t_ray *ray);
 
 // /garbage collector
+char	*ft_strdup1(char *str);
 void *ft_malloc(size_t size);
 void ft_free_all();
 

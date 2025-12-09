@@ -85,13 +85,14 @@ void player_angle_set(t_map *map, char c)
 {
     map->player.player_dir = c;
     if(c == 'N')
-        map->player.view_angle == 270 * (PI / 180);
+        map->player.view_angle = 270 * (PI / 180);
     else if(c == 'S')
-        map->player.view_angle == 90 * (PI / 180);
+        map->player.view_angle = 90 * (PI / 180);
     else if(c == 'E')
-        map->player.view_angle == 0 * (PI / 180);
+        map->player.view_angle = 0 * (PI / 180);
     else if(c == 'W')
-        map->player.view_angle == 180 * (PI / 180);
+        map->player.view_angle = 180 * (PI / 180);
+    player_direction(&(map->player));
 }
 
 int map_elements(t_map *map)
@@ -109,8 +110,6 @@ int map_elements(t_map *map)
             {
                 if(ft_strchr("NSEW", map->map[i][j]))
                 {
-                    if(map->player.view_angle)
-                        return 1;
                     player_angle_set(map , map->map[i][j]);
                     map->player.center_pos.row = i * TILE_SIZE + (TILE_SIZE / 2);
                     map->player.center_pos.col = j * TILE_SIZE + (TILE_SIZE / 2);

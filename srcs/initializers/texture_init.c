@@ -6,31 +6,32 @@ int texture_init(t_mlx *mlx)
     //garbage collector to be added
 
     t_map *map = &(mlx->map);
-    map->tex_no.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "/home/aijadid/Desktop/CUBEOFF/textures/149.xpm", &(map->tex_no.width), &(map->tex_no.height));
-    // printf("width : %p\n",map->tex_no.img_ptr  );
-    if (!map->tex_no.img_ptr)
+    // printf("texture path %s\n", mlx->map.tex_no.path);
+    map->textures[NO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, map->textures[NO].path, &(map->textures[NO].width), &(map->textures[NO].height));
+    // printf("width : %p\n",map->textures[NO].img_ptr  );
+    if (!map->textures[NO].img_ptr)
         return 0;
-    map->tex_so.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "/home/aijadid/Desktop/CUBEOFF/textures/152.xpm", &(map->tex_so.width), &(map->tex_so.height));
-    if (!map->tex_no.img_ptr)
+    map->textures[SO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[SO].path, &(map->textures[SO].width), &(map->textures[SO].height));
+    if (!map->textures[SO].img_ptr)
         return 0;
-    map->tex_ea.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "/home/aijadid/Desktop/CUBEOFF/textures/153.xpm", &(map->tex_ea.width), &(map->tex_ea.height));
-    if (!map->tex_no.img_ptr)
+    map->textures[EA].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[EA].path, &(map->textures[EA].width), &(map->textures[EA].height));
+    if (!map->textures[EA].img_ptr)
         return 0;
-    map->tex_we.img_ptr = mlx_xpm_file_to_image(mlx->mlx, "/home/aijadid/Desktop/CUBEOFF/textures/176.xpm", &(map->tex_we.width), &(map->tex_we.height));
-    if (!map->tex_we.img_ptr)
+    map->textures[WE].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[WE].path, &(map->textures[WE].width), &(map->textures[WE].height));
+    if (!map->textures[WE].img_ptr)
         return 0;
     
-    map->tex_no.addr = mlx_get_data_addr(map->tex_no.img_ptr, &(map->tex_no.bpp), &(map->tex_no.line_len), &(map->tex_no.endian));
-    if(!map->tex_no.addr)
+    map->textures[NO].addr = mlx_get_data_addr(map->textures[NO].img_ptr, &(map->textures[NO].bpp), &(map->textures[NO].line_len), &(map->textures[NO].endian));
+    if(!map->textures[NO].addr)
         return 0;
-    map->tex_so.addr = mlx_get_data_addr(map->tex_so.img_ptr, &(map->tex_so.bpp), &(map->tex_so.line_len), &(map->tex_so.endian));
-    if(!map->tex_so.addr)
+    map->textures[SO].addr = mlx_get_data_addr(map->textures[SO].img_ptr, &(map->textures[SO].bpp), &(map->textures[SO].line_len), &(map->textures[SO].endian));
+    if(!map->textures[SO].addr)
         return 0;
-    map->tex_ea.addr = mlx_get_data_addr(map->tex_ea.img_ptr, &(map->tex_ea.bpp), &(map->tex_ea.line_len), &(map->tex_ea.endian));
-    if(!map->tex_ea.addr)
+    map->textures[EA].addr = mlx_get_data_addr(map->textures[EA].img_ptr, &(map->textures[EA].bpp), &(map->textures[EA].line_len), &(map->textures[EA].endian));
+    if(!map->textures[EA].addr)
         return 0;
-    map->tex_we.addr = mlx_get_data_addr(map->tex_we.img_ptr, &(map->tex_we.bpp), &(map->tex_we.line_len), &(map->tex_we.endian));
-    if(!map->tex_we.addr)
+    map->textures[WE].addr = mlx_get_data_addr(map->textures[WE].img_ptr, &(map->textures[WE].bpp), &(map->textures[WE].line_len), &(map->textures[WE].endian));
+    if(!map->textures[WE].addr)
         return 0;
     return 1;
 
