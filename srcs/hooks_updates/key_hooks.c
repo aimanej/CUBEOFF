@@ -19,6 +19,10 @@ int press_hook(int keysim, void *data)
     {
         mlx->map.player.walk_dir = -1;
     }
+    else if(keysim == 65505)
+    {
+        mlx->map.player.move_speed *= 10;
+    }
     else if (keysim == 65307)
     {
 
@@ -26,6 +30,7 @@ int press_hook(int keysim, void *data)
         printf("made it here\n");
         ft_free_all();
     }
+    
 }
 
 int release_hook(int keysim, void *data)
@@ -46,6 +51,10 @@ int release_hook(int keysim, void *data)
     if (keysim == 65364)
     {
         mlx->map.player.walk_dir = 0;
+    }
+    if(keysim == 65505)
+    {
+        mlx->map.player.move_speed = 2;
     }
 
 }

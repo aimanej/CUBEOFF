@@ -32,7 +32,9 @@ int getpixelcolor(t_map *map, t_ray *ray, int row, int col)
     if (col > map->textures[ray->compass].width)
         col = map->textures[ray->compass].width - 1;
     char *addr = map->textures[ray->compass].addr + (map->textures[ray->compass].line_len * row) + (col * (map->textures[ray->compass].bpp / 8));
-    int pixel = *(int *)addr;
+    int pixel = 0;
+    if(addr)
+        pixel = *(int *)addr;
 
     return pixel;
 }

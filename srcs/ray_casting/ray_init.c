@@ -108,7 +108,7 @@ void set_nearest_wall(t_map *map, t_ray *ray)
     }
 
     ray->wall_distance = ray->wall_distance * cos(ray->angle - map->player.view_angle);
-    printf("wall distance %f \n", ray->wall_distance);
+    // printf("wall distance %f \n", ray->wall_distance);
     if(ray->wall_distance < 10)
         ray->wall_distance = 10;
     return;
@@ -121,6 +121,8 @@ void projected_wall_height(t_map *map, t_ray *ray)
     double proj_dist = ((WIDTH) / 2) / tan(map->player.fov / 2);
 
     ray->wall_height = (wall_hight / ray->wall_distance) * proj_dist;
+    ray->unclipped = ray->wall_height;
+    // printf("unclipped : %f \n", ray->unclipped);
 
     // ray->wall_height /= HEIGHT;
 
@@ -150,8 +152,20 @@ void draw_walls(t_map *map)
         t_ray *ray = map->ray_arr[t];
         int grad = ((HEIGHT - 1) / ray->wall_height) * 4;
 
-        step = map->textures[ray->compass].height / ray->wall_height;
+        step = map->textures[ray->compass].height / ray->unclipped;
         double tex_row = 0;
+        // if(ray->unclipped > HEIGHT)
+        // {
+        //     tex_row = ((1 - (double)(map->textures[ray->compass].height / ray->unclipped)) / 2) * (double)(map->textures[ray->compass].height);
+        // }
+
+        if(ray->unclipped > HEIGHT)
+        {
+            double t = (1 - (HEIGHT / ray->unclipped)) / 2;
+            printf("t : %f height : %f \n", t, (double)(map->textures[ray->compass].height));
+            tex_row = t * (double)(map->textures[ray->compass].height);
+        }
+        printf("texture row : %f\n", tex_row);
         int p = 1;
         while (p < ray->row_start)
         {

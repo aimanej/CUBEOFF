@@ -9,7 +9,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "/home/aimane-jadid/Desktop/studies/minilibx-linux/mlx.h"
+#include "../minilibx-linux/mlx.h"
  #include <strings.h>
 
 #define PI 3.14159265358979323846
@@ -63,6 +63,7 @@ typedef struct s_ray
     double ver_wall_distance;
     double wall_distance;
     double texture_col;
+    double unclipped;
     int face_lr;
     int face_du;
     double tanner;
