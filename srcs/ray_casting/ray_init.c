@@ -108,6 +108,9 @@ void set_nearest_wall(t_map *map, t_ray *ray)
     }
 
     ray->wall_distance = ray->wall_distance * cos(ray->angle - map->player.view_angle);
+    printf("wall distance %f \n", ray->wall_distance);
+    if(ray->wall_distance < 10)
+        ray->wall_distance = 10;
     return;
 }
 
@@ -149,7 +152,6 @@ void draw_walls(t_map *map)
 
         step = map->textures[ray->compass].height / ray->wall_height;
         double tex_row = 0;
-
         int p = 1;
         while (p < ray->row_start)
         {

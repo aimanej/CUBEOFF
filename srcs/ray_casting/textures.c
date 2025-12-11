@@ -15,6 +15,7 @@ void texture_col_int(t_map *map)
             ray->texture_col = ray->wallhit_row;
         ray->texture_col = fmod(ray->texture_col, TILE_SIZE);
         ray->texture_col = (ray->texture_col * map->textures[ray->compass].width) / TILE_SIZE;
+        // printf("collumn in texture : %f\n", ray->texture_col);
         t++;
     }
 }

@@ -11,7 +11,7 @@ void player_update(t_map *map)
         double next_cy = map->player.center_pos.row + sin(map->player.view_angle) * step;
         int nextx = next_cx / TILE_SIZE;
         int nexty = next_cy / TILE_SIZE;
-        if (map->map[nexty][nextx] == '1')
+        if (map->map[nexty][nextx] == '1' || (map->ray_arr[WIDTH / 2 ]->wall_distance <= (TILE_SIZE / 5) && map->player.walk_dir == 1))
             return;
         else
         {

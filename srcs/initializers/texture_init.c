@@ -3,12 +3,9 @@
 int texture_init(t_mlx *mlx)
 {
 
-    //garbage collector to be added
 
     t_map *map = &(mlx->map);
-    // printf("texture path %s\n", mlx->map.tex_no.path);
     map->textures[NO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, map->textures[NO].path, &(map->textures[NO].width), &(map->textures[NO].height));
-    // printf("width : %p\n",map->textures[NO].img_ptr  );
     if (!map->textures[NO].img_ptr)
         return 0;
     map->textures[SO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[SO].path, &(map->textures[SO].width), &(map->textures[SO].height));
