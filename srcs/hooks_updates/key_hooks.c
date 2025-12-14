@@ -27,8 +27,8 @@ int press_hook(int keysim, void *data)
     {
 
         mlx_loop_end(mlx->mlx);
-        printf("made it here\n");
-        ft_free_all();
+        // printf("made it here\n");
+        ft_free_all(0);
     }
     
 }

@@ -162,10 +162,10 @@ void draw_walls(t_map *map)
         if(ray->unclipped > HEIGHT)
         {
             double t = (1 - (HEIGHT / ray->unclipped)) / 2;
-            printf("t : %f height : %f \n", t, (double)(map->textures[ray->compass].height));
+            // printf("t : %f height : %f \n", t, (double)(map->textures[ray->compass].height));
             tex_row = t * (double)(map->textures[ray->compass].height);
         }
-        printf("texture row : %f\n", tex_row);
+        // printf("texture row : %f\n", tex_row);
         int p = 1;
         while (p < ray->row_start)
         {

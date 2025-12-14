@@ -34,6 +34,17 @@ char *get_path(char *str)
         return (path);
     return NULL;
 }
+static char	**ft_free(char **r, int in)
+{
+	int t = 0;
+	while (r[t])
+	{
+		free(r[t]);
+		t++;
+	}
+	free(r);
+	return (NULL);
+}
 
 int floor_ceiling(char *line, char c, t_map *map)
 {
@@ -79,9 +90,7 @@ int floor_ceiling(char *line, char c, t_map *map)
         map->fl_color = chimicolor(r, g, b);
     else
         map->ceil_color = chimicolor(r, g, b);
-    // function to convert rgb and store it
-
-    // FREE TMP;
+    ft_free(tmp, i + 1);
     return (0);
 }
 int is_identifier(char *str)

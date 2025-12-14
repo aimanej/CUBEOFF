@@ -55,10 +55,11 @@ static int	fill(const char *s, int i, char *r, char c)
 
 static char	**ft_free(char **r, int in)
 {
-	while (in >= 0)
+	int t = 0;
+	while (r[t])
 	{
-		free(r[in]);
-		in--;
+		free(r[t]);
+		t++;
 	}
 	free(r);
 	return (NULL);

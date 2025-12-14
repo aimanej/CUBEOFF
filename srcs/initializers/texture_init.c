@@ -8,15 +8,19 @@ int texture_init(t_mlx *mlx)
     map->textures[NO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, map->textures[NO].path, &(map->textures[NO].width), &(map->textures[NO].height));
     if (!map->textures[NO].img_ptr)
         return 0;
+    ft_add_last_ptr(dump_ptr(), ft_new_ptr(map->textures[NO].img_ptr, 1));
     map->textures[SO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[SO].path, &(map->textures[SO].width), &(map->textures[SO].height));
     if (!map->textures[SO].img_ptr)
         return 0;
+    ft_add_last_ptr(dump_ptr(), ft_new_ptr(map->textures[SO].img_ptr, 1));
     map->textures[EA].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[EA].path, &(map->textures[EA].width), &(map->textures[EA].height));
     if (!map->textures[EA].img_ptr)
         return 0;
+    ft_add_last_ptr(dump_ptr(), ft_new_ptr(map->textures[EA].img_ptr, 1));
     map->textures[WE].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[WE].path, &(map->textures[WE].width), &(map->textures[WE].height));
     if (!map->textures[WE].img_ptr)
         return 0;
+    ft_add_last_ptr(dump_ptr(), ft_new_ptr(map->textures[WE].img_ptr, 1));
     
     map->textures[NO].addr = mlx_get_data_addr(map->textures[NO].img_ptr, &(map->textures[NO].bpp), &(map->textures[NO].line_len), &(map->textures[NO].endian));
     if(!map->textures[NO].addr)

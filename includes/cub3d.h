@@ -17,6 +17,7 @@
 
 typedef struct s_garbage{
     void *ptr;
+    int img_t;
     struct s_garbage *next;
 } t_garbage;
 
@@ -126,6 +127,9 @@ int chimicolor(int r, int g, int b);
 void draw_to_img(t_image *img, int row, int col, int color);
 void render_func(t_mlx *mlx);
 // void cast_rays(t_map *map, double angle);
+void ft_add_last_ptr(t_garbage **dump, t_garbage *new);
+t_garbage **dump_ptr();
+t_garbage *ft_new_ptr(void *ptr, int type);
 
 // key hooks
 int hooker(int keysim, void *data);
@@ -166,7 +170,7 @@ void set_compass(t_map *map, t_ray *ray);
 // /garbage collector
 char	*ft_strdup1(char *str);
 void *ft_malloc(size_t size);
-void ft_free_all();
+void ft_free_all(int last);
 
 //horizontal calculations : 
 void first_hor_inter(t_map *map, t_ray *ray);

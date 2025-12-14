@@ -48,7 +48,7 @@ void ft_add_last_ptr(t_garbage **dump, t_garbage *new)
     new->next = NULL;
 }
 
-t_garbage *ft_new_ptr(void *ptr)
+t_garbage *ft_new_ptr(void *ptr, int type)
 {
     t_garbage *new;
 
@@ -56,6 +56,7 @@ t_garbage *ft_new_ptr(void *ptr)
     if (!new)
         return NULL;
     new->ptr = ptr;
+    new->img_t = type;
     new->next = NULL;
     return new;
 }
@@ -88,21 +89,35 @@ void ft_free_select(void *ptr)
 }
 
 
-void ft_free_all()
+void ft_free_all(int last)
 {
     t_garbage **dump_re = dump_ptr();
     t_garbage *dump = *dump_re;
     t_garbage *tmp = NULL;
 
+    if(last)
+    {
+        free(dump->ptr);
+        free(dump);
+        *dump_re = NULL;
+        return;
+    }
+    void *mlx = dump->ptr;
+    t_garbage *tmp2 = dump;
+    dump = dump->next;
+        printf("mlx in garbage c address : %p\n", mlx);
     while (dump)
     {
         tmp = dump->next;
-        free(dump->ptr);
+        if(dump->img_t)
+            mlx_destroy_image(mlx, dump->ptr);
+        else
+            free(dump->ptr);
         free(dump);
         dump = tmp;
         // printf(RED"was here\n\n"RESET);
     }
-    *dump_re = NULL;
+    *dump_re = tmp2;
 }
 
 void *ft_malloc(size_t size)
@@ -113,7 +128,7 @@ void *ft_malloc(size_t size)
     ptr = malloc(size);
     if (!ptr)
         return NULL;
-    t_garbage *new = ft_new_ptr(ptr);
+    t_garbage *new = ft_new_ptr(ptr, 0);
     if (!new)
     {
         free(ptr);
