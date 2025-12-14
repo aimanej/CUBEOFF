@@ -130,6 +130,7 @@ void render_func(t_mlx *mlx);
 void ft_add_last_ptr(t_garbage **dump, t_garbage *new);
 t_garbage **dump_ptr();
 t_garbage *ft_new_ptr(void *ptr, int type);
+void ft_free_select(void *ptr);
 
 // key hooks
 int hooker(int keysim, void *data);

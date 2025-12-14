@@ -82,9 +82,13 @@ void ft_free_select(void *ptr)
     }
     if(!dump->next)
         return;
+        
     tmp = dump->next;
     dump->next = tmp->next;
-    free(tmp->ptr);
+    if(tmp->img_t)
+        mlx_destroy_image((*main_dump)->ptr, tmp->ptr);
+    else
+        free(tmp->ptr);
     free(tmp);
 }
 
