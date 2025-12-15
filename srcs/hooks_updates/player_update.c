@@ -13,7 +13,7 @@ void player_update(t_map *map)
         int nexty = next_cy / TILE_SIZE;
         // if (nexty < 0 || nexty >=map->size || !map->map[nexty] || nextx < 0 || nextx >= ft_strlen(map->map[nexty]) || )
         //     return;
-        if (map->map[nexty][nextx] == '1' || (map->ray_arr[WIDTH / 2 ]->wall_distance <= (TILE_SIZE / 5) && map->player.walk_dir == 1))
+        if (map->map[nexty][nextx] == '1')
             return;
         else
         {
@@ -40,7 +40,6 @@ void player_update(t_map *map)
             return;
         else
         {
-            printf("positions before : %f / %f \n positions after : %f / %f \n", map->player.center_pos.row, map->player.center_pos.col, next_cy, next_cx);
             map->player.center_pos.row = next_cy;
             map->player.center_pos.col = next_cx;
             map->player.pos.col = nextx;

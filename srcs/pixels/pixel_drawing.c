@@ -16,11 +16,10 @@ void render_func(t_mlx *mlx)
 
 int wall_check(t_map *map, double row, double col)
 {
-    int coll = floor((int)(col / TILE_SIZE));
-    int roww = floor((int)(row / TILE_SIZE));
-    // printf("coll : %d roww %d position checked : %c\n", coll, roww, map->map[roww][coll]);
+    int coll = (int)(col / TILE_SIZE);
+    int roww = (int)(row / TILE_SIZE);
 
-    if (coll <= 0 || coll >= map->len - 1 || roww <= 0 || roww >= map->size - 1 || map->map[roww][coll] == '1')
+    if (roww <= 0 || roww >= map->size - 1 || coll <= 0 || coll >= ft_strlen(map->map[roww]) - 1 || map->map[roww][coll] == '1')
         return 1;
     return 0;
 }

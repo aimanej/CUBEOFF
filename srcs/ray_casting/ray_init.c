@@ -140,6 +140,7 @@ void projected_wall_height(t_map *map, t_ray *ray)
     ray->row_end = ray->row_start + ray->wall_height;
     if (ray->row_end > HEIGHT - 1)
         ray->row_end = HEIGHT - 1;
+    printf("wall height : %f\n", ray->wall_height);
 }
 
 void draw_walls(t_map *map)

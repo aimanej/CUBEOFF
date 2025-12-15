@@ -34,7 +34,7 @@ void ver_step_calc(t_map *map, t_ray *ray)
 
 void ver_distance_calc(t_map *map, t_ray *ray)
 {
-    double off = (ray->face_lr == LEFT) ? -1 : 0;
+    double off = (ray->face_lr == LEFT) ? -EPS : EPS;
     int a = 0;
     while (!wall_check(map, ray->ver_inter_row, ray->ver_inter_col + off))
     {

@@ -6,7 +6,7 @@ SRCS_CST = srcs/initializers/texture_init.c srcs/ray_casting/textures.c srcs/pix
 
 Flags = -lmlx -lXext -lX11 -lm
 
-Mlx_Path = -L /home/aimane-jadid/Desktop/studies/minilibx-linux/
+Mlx_Path = -L /mnt/c/Users/AIMANE~1/Desktop/school/wall/minilibx-linux/
 
 Headers = includes/get_next_line.h includes/cub3d.h includes/cub.h
 

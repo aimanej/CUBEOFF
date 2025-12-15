@@ -3,7 +3,7 @@
 int press_hook(int keysim, void *data)
 {
     t_mlx *mlx = data;
-    printf("keysim : %d\n", keysim);
+    // printf("keysim : %d\n", keysim);
     if (keysim == 65361)
     {
         mlx->map.player.turn_dir = -1;

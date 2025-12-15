@@ -33,7 +33,7 @@ void hor_step_calc(t_map *map, t_ray *ray)
 
 void hor_distance_calc(t_map *map, t_ray *ray)
 {
-    double off = (ray->face_du == UP) ? -1 : 0;
+    double off = (ray->face_du == UP) ? -EPS : EPS;
 
     while (!wall_check(map, ray->hor_inter_row + off, ray->hor_inter_col))
     {

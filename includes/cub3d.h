@@ -9,9 +9,11 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "/home/aimane-jadid/Desktop/studies/minilibx-linux/mlx.h"
+#include "../minilibx-linux/mlx.h"
  #include <strings.h>
 
+ #define EPS 0.0001
+ 
 #define PI 3.14159265358979323846
 
 
