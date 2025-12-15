@@ -154,11 +154,6 @@ void draw_walls(t_map *map)
 
         step = map->textures[ray->compass].height / ray->unclipped;
         double tex_row = 0;
-        // if(ray->unclipped > HEIGHT)
-        // {
-        //     tex_row = ((1 - (double)(map->textures[ray->compass].height / ray->unclipped)) / 2) * (double)(map->textures[ray->compass].height);
-        // }
-
         if(ray->unclipped > HEIGHT)
         {
             double t = (1 - (HEIGHT / ray->unclipped)) / 2;

@@ -36,5 +36,12 @@ int getpixelcolor(t_map *map, t_ray *ray, int row, int col)
     if(addr)
         pixel = *(int *)addr;
 
+    // int colors[3] = {(pixel >> 16) & 0xFF, (pixel >> 8) & 0xFF, pixel & 0xFF};
+    // int grad = ((ray->wall_height / HEIGHT));
+    // for(int t = 0; t < 3; t++)
+    // {
+    //     colors[t] /= grad;
+    // }
+    // pixel = chimicolor(colors[0], colors[1], colors[2]);
     return pixel;
 }

@@ -6,6 +6,8 @@ int chimicolor(int r, int g, int b)
     return (r << 16 | g << 8 | b);
 }
 
+// int shader(int rgb, )
+
 
 void draw_to_img(t_image *img, int row, int col, int color)
 {

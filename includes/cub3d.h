@@ -9,7 +9,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../minilibx-linux/mlx.h"
+#include "/home/aimane-jadid/Desktop/studies/minilibx-linux/mlx.h"
  #include <strings.h>
 
 #define PI 3.14159265358979323846
@@ -90,6 +90,7 @@ typedef struct s_player
     int radius;
     int turn_dir;
     int walk_dir;
+    int side_walk;
     double view_angle;
     int move_speed;
     double rotation_speed;
@@ -171,7 +172,7 @@ void set_compass(t_map *map, t_ray *ray);
 // /garbage collector
 char	*ft_strdup1(char *str);
 void *ft_malloc(size_t size);
-void ft_free_all(int last);
+void ft_free_all();
 
 //horizontal calculations : 
 void first_hor_inter(t_map *map, t_ray *ray);
