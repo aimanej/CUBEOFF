@@ -18,6 +18,7 @@ typedef struct s_data
     char player_dir;
     int player_x;
     int player_y;
+    int player_count;
     int count;
 }   t_data;
 

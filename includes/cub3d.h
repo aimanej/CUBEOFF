@@ -7,7 +7,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "/home/aimane-jadid/Desktop/studies/minilibx-linux/mlx.h"
+#include "/mnt/c/Users/AIMANE~1/desktop/minilibx-linux/mlx.h"
 #include <strings.h>
  
 #define PI 3.14159265358979323846
@@ -94,6 +94,7 @@ typedef struct s_player
     t_face face_du;
     t_face face_lr;
     char player_dir;
+    int player_c;
 } t_player;
 
 typedef struct s_map

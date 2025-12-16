@@ -22,7 +22,7 @@ int check_filename(char *filename)
         return 1;
     i = ft_strlen(filename);
 
-    if (i <= 4 || filename[i - 1] != 'b' || filename[i - 2] != 'u' || filename[i - 3] != 'c' || filename[i - 4] != '.')
+    if (i <= 4 || filename[i - 1] != 'b' || filename[i - 2] != 'u' || filename[i - 3] != 'c' || filename[i - 4] != '.' || filename[i - 5] == '/')
         return (1);
     return (0);
 }
@@ -30,7 +30,10 @@ char *get_path(char *str)
 {
     char *path = ft_strchr(str, '.');
     if (!path)
-        return NULL;
+    {
+        error("Path not found\n");
+        ft_free_all();
+    }
     if (path[0] == '/')
         return (path);
     return NULL;
@@ -105,7 +108,7 @@ int parse_identif(char *str, t_map *map)
 {
     if (!ft_strncmp(str, "NO ", 3))
     {
-        if (map->textures[NO].path )
+        if (map->textures[NO].path)
             return 0;
         map->textures[NO].path = ft_strdup1(get_path(str));
     }
@@ -172,7 +175,6 @@ int check_map_file(char *filename, t_map *map)
     close(fd);
     if (!map->textures[EA].path || !map->textures[SO].path || !map->textures[NO].path || !map->textures[WE].path)
         return 1;
-    printf("end of identification : string %s \n", map->textures[NO].path);
     return 0;
 }
 

@@ -37,6 +37,8 @@ char	*ft_strdup1(char *str)
 	char	*res;
 
 	i = 0;
+    if(!str)
+        return NULL;
 	res = ft_malloc(ft_strlen(str) + 1);
 	if (!res)
 		return (NULL);
@@ -99,8 +101,10 @@ int map_elements(t_map *map)
 {
     int i;
     int j;
+    int count;
 
     i = 0;
+    count = 0;
     while(map->map[i])
     {
         j = 0;
@@ -110,6 +114,7 @@ int map_elements(t_map *map)
             {
                 if(ft_strchr("NSEW", map->map[i][j]))
                 {
+                    count++;
                     player_angle_set(map , map->map[i][j]);
                     map->player.center_pos.row = i * TILE_SIZE + (TILE_SIZE / 2);
                     map->player.center_pos.col = j * TILE_SIZE + (TILE_SIZE / 2);
@@ -122,6 +127,8 @@ int map_elements(t_map *map)
         }
         i++;
     }
+    if(count != 1)
+        error("One player needed\n");
     return 0;
 }
 
