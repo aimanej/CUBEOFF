@@ -10,11 +10,11 @@ Mlx_Path = -L /home/aimane-jadid/Desktop/studies/minilibx-linux/
 
 Headers = includes/get_next_line.h includes/cub3d.h includes/cub.h
 
-Name = cube 
+Name = cub3D
 
 all: $(Name)
 
-$(Name): $(Header) $(Srcs) $(SRCS_CST) $(NEWSRC)
+$(Name): $(Headers) $(Srcs) $(SRCS_CST) $(NEWSRC)
 	cc -g $(Srcs) $(SRCS_CST) $(NEWSRC) $(Mlx_Path) $(Flags) -o $(Name)
 
 clean:

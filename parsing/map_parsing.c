@@ -60,6 +60,7 @@ void allocate_map(t_map *map, char *filename)
     if(fd == -1)
     {
         printf("ERROR/open");
+        ft_free_all();
         exit(1);
     }
     map->map = ft_malloc((map->size + 1) * sizeof(char *));

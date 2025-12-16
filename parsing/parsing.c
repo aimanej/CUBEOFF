@@ -3,6 +3,7 @@
 void error(char *message)
 {
     printf("error/ %s\n", message);
+    ft_free_all();
     exit(1);
 }
 int is_map(char *line)
@@ -146,7 +147,6 @@ int check_map_file(char *filename, t_map *map)
             printf("%s\n", str);
             if (!parse_identif(str, map))
                 error("too many identifiers");
-            printf("string north : '%s'\n", map->textures[NO].path);
         }
         else if (is_map(str))
             map->size++;
@@ -183,8 +183,6 @@ void parsing(char **av, t_map *map)
         error("invalid filename");
     if (check_map_file(av[1], map))
         error("invalid path or componant");
-    printf("string north later : '%s'\n", map->textures[NO].path);
-
     allocate_map(map, av[1]);
     parse_map(map);
     printf("VALID MAP\n");
