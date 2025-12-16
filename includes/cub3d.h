@@ -9,7 +9,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../minilibx-linux/mlx.h"
+#include "/home/aimane-jadid/Desktop/studies/minilibx-linux/mlx.h"
  #include <strings.h>
 
  #define EPS 0.0001
@@ -170,6 +170,8 @@ void minimap(t_mlx *mlx);
 void draw_player(t_map *map);
 void mini_rays(t_map *map);
 void set_compass(t_map *map, t_ray *ray);
+int destroy_notify(int keysim, void *data);
+void mlx_hook_loops(t_mlx *mlx);
 
 // /garbage collector
 char	*ft_strdup1(char *str);
@@ -186,6 +188,11 @@ void ver_step_calc(t_map *map, t_ray *ray);
 void first_ver_inter(t_map *map, t_ray *ray);
 void ver_distance_calc(t_map *map, t_ray *ray);
 // double AB_distance(double rowa, double cola, double rowb, double colb);
+
+void paint_ceiling(t_map *map, t_ray *ray, int cur_col);
+void paint_wall(t_map *map, t_ray *ray, int cur_col);
+void paint_floor(t_map *map, t_ray *ray, int cur_col);
+
 #include "cub.h"
 
 #endif

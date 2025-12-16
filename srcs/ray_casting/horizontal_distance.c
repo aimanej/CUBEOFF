@@ -1,5 +1,11 @@
 #include "../../includes/cub3d.h"
 
+
+double AB_distance(double rowa, double cola, double rowb, double colb)
+{
+    return sqrt(((rowa - rowb) * (rowa - rowb)) + ((cola - colb) * (cola - colb)));
+}
+
 void first_hor_inter(t_map *map, t_ray *ray)
 {
     ray->hor_inter_row = floor(map->player.center_pos.row / TILE_SIZE) * TILE_SIZE;
@@ -41,12 +47,10 @@ void hor_distance_calc(t_map *map, t_ray *ray)
         ray->hor_inter_col += ray->hor_col_step;
         if (ray->hor_inter_col < 0 || ray->hor_inter_col >= map->len * TILE_SIZE || ray->hor_inter_row < 0 || ray->hor_inter_row >= map->size * TILE_SIZE)
             break;
-        // return;
     }
     t_player player = map->player;
     
     ray->hor_wall_distance = AB_distance(ray->hor_inter_row, ray->hor_inter_col, player.center_pos.row, player.center_pos.col);
 
-    // printf("horizontal wall distance  %f\n", distance);
     return ;
 }

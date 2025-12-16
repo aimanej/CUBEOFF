@@ -1,39 +1,46 @@
 #include "../../includes/cub3d.h"
 
+void image_converter(t_mlx *mlx)
+{
+    t_image *textures = mlx->map.textures;
+    textures[NO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, textures[NO].path, &(textures[NO].width), &(textures[NO].height));
+    if (!textures[NO].img_ptr)
+        return ft_free_all();
+    ft_add_last_ptr(dump_ptr(), ft_new_ptr(textures[NO].img_ptr, 1));
+    textures[SO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[SO].path, &(textures[SO].width), &(textures[SO].height));
+    if (!textures[SO].img_ptr)
+        return ft_free_all();
+    ft_add_last_ptr(dump_ptr(), ft_new_ptr(textures[SO].img_ptr, 1));
+    textures[EA].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[EA].path, &(textures[EA].width), &(textures[EA].height));
+    if (!textures[EA].img_ptr)
+        return ft_free_all();
+    ft_add_last_ptr(dump_ptr(), ft_new_ptr(textures[EA].img_ptr, 1));
+    textures[WE].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[WE].path, &(textures[WE].width), &(textures[WE].height));
+    if (!textures[WE].img_ptr)
+        return ft_free_all();
+    ft_add_last_ptr(dump_ptr(), ft_new_ptr(textures[WE].img_ptr, 1));
+}
+
+void image_address(t_mlx *mlx)
+{
+    t_image *textures = mlx->map.textures;
+
+    textures[NO].addr = mlx_get_data_addr(textures[NO].img_ptr, &(textures[NO].bpp), &(textures[NO].line_len), &(textures[NO].endian));
+    if (!textures[NO].addr)
+        return ft_free_all();
+    textures[SO].addr = mlx_get_data_addr(textures[SO].img_ptr, &(textures[SO].bpp), &(textures[SO].line_len), &(textures[SO].endian));
+    if (!textures[SO].addr)
+        return ft_free_all();
+    textures[EA].addr = mlx_get_data_addr(textures[EA].img_ptr, &(textures[EA].bpp), &(textures[EA].line_len), &(textures[EA].endian));
+    if (!textures[EA].addr)
+        return ft_free_all();
+    textures[WE].addr = mlx_get_data_addr(textures[WE].img_ptr, &(textures[WE].bpp), &(textures[WE].line_len), &(textures[WE].endian));
+    if (!textures[WE].addr)
+        return ft_free_all();
+}
+
 int texture_init(t_mlx *mlx)
 {
-
-
-    t_map *map = &(mlx->map);
-    map->textures[NO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, map->textures[NO].path, &(map->textures[NO].width), &(map->textures[NO].height));
-    if (!map->textures[NO].img_ptr)
-        return 0;
-    ft_add_last_ptr(dump_ptr(), ft_new_ptr(map->textures[NO].img_ptr, 1));
-    map->textures[SO].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[SO].path, &(map->textures[SO].width), &(map->textures[SO].height));
-    if (!map->textures[SO].img_ptr)
-        return 0;
-    ft_add_last_ptr(dump_ptr(), ft_new_ptr(map->textures[SO].img_ptr, 1));
-    map->textures[EA].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[EA].path, &(map->textures[EA].width), &(map->textures[EA].height));
-    if (!map->textures[EA].img_ptr)
-        return 0;
-    ft_add_last_ptr(dump_ptr(), ft_new_ptr(map->textures[EA].img_ptr, 1));
-    map->textures[WE].img_ptr = mlx_xpm_file_to_image(mlx->mlx, mlx->map.textures[WE].path, &(map->textures[WE].width), &(map->textures[WE].height));
-    if (!map->textures[WE].img_ptr)
-        return 0;
-    ft_add_last_ptr(dump_ptr(), ft_new_ptr(map->textures[WE].img_ptr, 1));
-    
-    map->textures[NO].addr = mlx_get_data_addr(map->textures[NO].img_ptr, &(map->textures[NO].bpp), &(map->textures[NO].line_len), &(map->textures[NO].endian));
-    if(!map->textures[NO].addr)
-        return 0;
-    map->textures[SO].addr = mlx_get_data_addr(map->textures[SO].img_ptr, &(map->textures[SO].bpp), &(map->textures[SO].line_len), &(map->textures[SO].endian));
-    if(!map->textures[SO].addr)
-        return 0;
-    map->textures[EA].addr = mlx_get_data_addr(map->textures[EA].img_ptr, &(map->textures[EA].bpp), &(map->textures[EA].line_len), &(map->textures[EA].endian));
-    if(!map->textures[EA].addr)
-        return 0;
-    map->textures[WE].addr = mlx_get_data_addr(map->textures[WE].img_ptr, &(map->textures[WE].bpp), &(map->textures[WE].line_len), &(map->textures[WE].endian));
-    if(!map->textures[WE].addr)
-        return 0;
-    return 1;
-
+    image_converter(mlx);
+    image_address(mlx);
 }

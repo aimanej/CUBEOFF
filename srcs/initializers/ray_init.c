@@ -4,7 +4,6 @@ t_ray *newray()
 {
     t_ray *ray;
 
-    // ray = malloc(sizeof(t_ray));
     ray = ft_malloc(sizeof(t_ray));
     if(!ray)
         return NULL;
@@ -17,8 +16,6 @@ t_ray *newray()
 
 int init_ray_arr(t_map *map)
 {
-    // map->ray_arr = malloc(sizeof(t_ray *) * (WIDTH + 1));
-
     map->ray_arr = ft_malloc(sizeof(t_ray *) * (WIDTH + 1));
     
     if(!(map->ray_arr))
@@ -31,4 +28,13 @@ int init_ray_arr(t_map *map)
     }
     map->ray_arr[t] = NULL;
     return 1;
+}
+
+void map_init(t_mlx *mlx)
+{
+    bzero(&(mlx->map), sizeof(mlx->map));
+    mlx->map.player.move_speed = 2;
+    mlx->map.player.radius = 3;
+    mlx->map.player.rotation_speed = 2 * (PI / 180);
+    mlx->map.player.fov = 60 * (PI / 180);
 }
